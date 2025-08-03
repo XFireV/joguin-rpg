@@ -1,0 +1,240 @@
+:root {
+  --color-bg: #000000;
+  --color-panel: #0a192f;
+  --color-border: #1a2c4e;
+  --color-interactive: #9f50ff;
+  --color-interactive-hover: #bf8fff;
+  --color-text-primary: #e6e6fa;
+  --color-text-secondary: #a0a8c4;
+
+  /* Cores de Raridade */
+  --rarity-comum: #ffffff;
+  --rarity-incomum: #1eff00;
+  --rarity-raro: #0070dd;
+  --rarity-ultra-raro: #00008b; /* Azul Escuro */
+  --rarity-reliquia: #a335ee; /* Roxo */
+  --rarity-lendario: #ff80ed; /* Rosa */
+  --rarity-mitico: #ff0000;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  user-select: none;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+}
+
+#app {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+/* Sistema de Telas */
+.screen {
+  width: 100%;
+  height: 100%;
+  padding: 40px;
+  display: none; /* Escondido por padrão */
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.screen.active {
+  display: flex; /* Visível */
+}
+
+.screen h1, .screen h2 {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--color-text-primary);
+  border-bottom: 2px solid var(--color-border);
+  padding-bottom: 10px;
+  width: 100%;
+  max-width: 900px;
+  text-align: center;
+}
+
+/* Hub Principal */
+#hub-screen {
+  justify-content: center;
+}
+.hub-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
+  width: 100%;
+  max-width: 800px;
+}
+.hub-button {
+  background-color: transparent;
+  border: 2px solid var(--color-interactive);
+  color: var(--color-interactive);
+  border-radius: 8px;
+  padding: 20px;
+  font-size: 1.2em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.hub-button i {
+  font-size: 2.5em;
+}
+.hub-button:hover {
+  background-color: var(--color-interactive);
+  color: var(--color-bg);
+  transform: translateY(-5px);
+  box-shadow: 0 5px 20px rgba(159, 80, 255, 0.4);
+}
+
+/* Painéis e Conteúdo das Telas */
+.panel {
+  width: 100%;
+  max-width: 900px;
+  background-color: var(--color-panel);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 25px;
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: none;
+  border: 1px solid var(--color-interactive);
+  color: var(--color-interactive);
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  z-index: 10;
+}
+.back-button:hover {
+  background-color: var(--color-interactive);
+  color: var(--color-bg);
+}
+
+/* Painel de Status Consolidado */
+#status-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.status-section {
+  background-color: rgba(0,0,0,0.2);
+  padding: 15px;
+  border-radius: 5px;
+  border-left: 3px solid var(--color-interactive);
+}
+.status-section h3 {
+  margin-bottom: 10px;
+  color: var(--color-interactive-hover);
+}
+.status-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 20px;
+}
+.stat-line {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 1.1em;
+}
+.stat-line button {
+  background-color: var(--color-interactive);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.stat-line button:disabled {
+  background-color: #555;
+  cursor: not-allowed;
+}
+
+/* Inventário */
+#inventory-weight {
+  text-align: right;
+  margin-bottom: 15px;
+  font-size: 1.1em;
+  color: var(--color-text-secondary);
+}
+#inventory-list {
+  list-style: none;
+}
+.inventory-item {
+  display: grid;
+  grid-template-columns: 3fr 1fr 1fr auto;
+  gap: 10px;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid var(--color-border);
+}
+.inventory-item:hover {
+  background-color: rgba(159, 80, 255, 0.1);
+}
+.item-name {
+  font-weight: bold;
+}
+
+/* Classes de Raridade */
+.rarity-Comum { color: var(--rarity-comum); }
+.rarity-Incomum { color: var(--rarity-incomum); }
+.rarity-Raro { color: var(--rarity-raro); }
+.rarity-Ultra-Raro { color: var(--rarity-ultra-raro); }
+.rarity-Relíquia { color: var(--rarity-reliquia); }
+.rarity-Lendário { color: var(--rarity-lendario); }
+.rarity-Mítico { color: var(--rarity-mitico); }
+
+
+/* Painel do Mundo */
+#world-info-panel {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background-color: var(--color-panel);
+  border: 1px solid var(--color-border);
+  border-radius: 5px;
+  padding: 10px 15px;
+  display: flex;
+  gap: 20px;
+  font-size: 1.1em;
+}
+#world-info-panel i {
+  margin-right: 5px;
+  color: var(--color-interactive-hover);
+}
+
+#changelog-content ul {
+  list-style-position: inside;
+}
+#changelog-content li {
+  margin-bottom: 5px;
+}
+#changelog-content hr {
+  margin: 15px 0;
+  border-color: var(--color-border);
+}
