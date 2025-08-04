@@ -1,5 +1,5 @@
 // =================================================================================
-// GERENCIADORES E LÓGICA PRINCIPAL
+// GERENCIADORES E LÓGICA PRINCIPAL - VERSÃO 0.12
 // =================================================================================
 
 class WorldManager {
@@ -13,12 +13,14 @@ class WorldManager {
         this.seasonDuration = 20 * this.dayDuration; // 20 dias
         this.lastSeasonChange = Date.now();
         this.lastEventCheck = Date.now();
+        this.activeEvents = []; // Eventos ativos
     }
 
     update(secondsPassed) {
         this.gameTime.setMinutes(this.gameTime.getMinutes() + secondsPassed);
         this.checkSeasonChange();
         this.checkGlobalEvents();
+        this.updateActiveEvents();
     }
 
     checkSeasonChange() {
@@ -36,10 +38,10 @@ class WorldManager {
 
     updateWeatherBySeason() {
         const weatherBySeason = {
-            "Primavera": ["Ensolarado", "Chuvoso", "Nublado"],
-            "Verão": ["Ensolarado", "Muito Quente"],
-            "Outono": ["Nublado", "Chuvoso", "Ventoso"],
-            "Inverno": ["Nevando", "Frio", "Nublado"]
+            "Primavera": ["Ensolarado", "Chuvoso", "Nublado", "Ventoso"],
+            "Verão": ["Ensolarado", "Muito Quente", "Seco"],
+            "Outono": ["Nublado", "Chuvoso", "Ventoso", "Frio"],
+            "Inverno": ["Nevando", "Frio", "Nublado", "Ventoso"]
         };
         
         const options = weatherBySeason[this.season];
@@ -48,10 +50,10 @@ class WorldManager {
 
     checkGlobalEvents() {
         const elapsed = Date.now() - this.lastEventCheck;
-        if (elapsed >= 30 * 60 * 1000) { // Verificar a cada 30 minutos
+        if (elapsed >= 15 * 60 * 1000) { // Verificar a cada 15 minutos
             this.lastEventCheck = Date.now();
             
-            if (Math.random() < 0.3) { // 30% de chance
+            if (Math.random() < 0.4) { // 40% de chance
                 this.triggerGlobalEvent();
             }
         }
@@ -60,31 +62,76 @@ class WorldManager {
     triggerGlobalEvent() {
         const events = {
             "Primavera": [
-                "🌸 Festival da Primavera começou! Todos os trabalhos dão 20% mais XP!",
-                "🌱 Época de plantio! Coletores de ervas encontram mais ingredientes!",
-                "🦋 Migração das borboletas! Chance aumentada de encontrar itens raros!"
+                { text: "🌸 Festival da Primavera começou! Todos os trabalhos dão 25% mais XP!", effect: "xp_boost", duration: 3600 },
+                { text: "🌱 Época de plantio! Coletores de ervas encontram mais ingredientes!", effect: "herb_boost", duration: 7200 },
+                { text: "🦋 Migração das borboletas! Chance aumentada de encontrar itens raros!", effect: "luck_boost", duration: 1800 },
+                { text: "🌧️ Chuva revigorante! Regeneração de HP/MP aumentada!", effect: "regen_boost", duration: 2700 },
+                { text: "🌿 Despertar da natureza! Habilidades de cura são mais efetivas!", effect: "heal_boost", duration: 3600 }
             ],
             "Verão": [
-                "☀️ Onda de calor! Mineradores trabalham mais devagar, mas encontram mais ouro!",
-                "🏖️ Temporada de aventuras! Exploradores ganham recompensas extras!",
-                "🔥 Dragões estão mais ativos! Cuidado ao caçar!"
+                { text: "☀️ Onda de calor! Mineradores trabalham mais devagar, mas encontram mais ouro!", effect: "mining_boost", duration: 5400 },
+                { text: "🏖️ Temporada de aventuras! Exploradores ganham recompensas extras!", effect: "adventure_boost", duration: 7200 },
+                { text: "🔥 Dragões estão mais ativos! Cuidado ao caçar, mas loot é melhor!", effect: "dragon_activity", duration: 3600 },
+                { text: "🌞 Sol escaldante! Habilidades de fogo causam mais dano!", effect: "fire_boost", duration: 1800 },
+                { text: "💎 Cristais se formam no calor! Chance de encontrar gemas raras!", effect: "crystal_formation", duration: 4500 }
             ],
             "Outono": [
-                "🍂 Colheita abundante! Lenhadores e coletores ganham recursos extras!",
-                "🎃 Noite das Bruxas se aproxima! Magos sombrios aparecem com mais frequência!",
-                "🌰 Época de preparação! Todos os trabalhos de coleta rendem 50% mais!"
+                { text: "🍂 Colheita abundante! Lenhadores e coletores ganham recursos extras!", effect: "harvest_boost", duration: 6000 },
+                { text: "🎃 Noite das Bruxas se aproxima! Magos sombrios aparecem com mais frequência!", effect: "dark_magic", duration: 3600 },
+                { text: "🌰 Época de preparação! Todos os trabalhos de coleta rendem 60% mais!", effect: "gathering_boost", duration: 5400 },
+                { text: "🍁 Folhas mágicas no ar! Consumíveis são mais efetivos!", effect: "potion_boost", duration: 2700 },
+                { text: "🧙‍♀️ Energia arcana flutuante! MP regenera mais rápido!", effect: "mana_flow", duration: 3600 }
             ],
             "Inverno": [
-                "❄️ Tempestade de neve! Alguns trabalhos ficam indisponíveis!",
-                "🎄 Festivais de inverno! Mercadores oferecem descontos especiais!",
-                "🧊 Criaturas do gelo aparecem! Novos inimigos nos campos de caça!"
+                { text: "❄️ Tempestade de neve! Alguns trabalhos ficam indisponíveis!", effect: "winter_storm", duration: 7200 },
+                { text: "🎄 Festivais de inverno! Mercadores oferecem descontos especiais!", effect: "winter_sale", duration: 10800 },
+                { text: "🧊 Criaturas do gelo aparecem! Novos inimigos nos campos de caça!", effect: "ice_creatures", duration: 5400 },
+                { text: "⛄ Magia do inverno! Habilidades de gelo são mais poderosas!", effect: "ice_boost", duration: 2700 },
+                { text: "🌨️ Nevasca purificadora! Remove todos os efeitos negativos!", effect: "purification", duration: 0 }
             ]
         };
 
-        const seasonEvents = events[this.season];
-        const event = seasonEvents[Math.floor(Math.random() * seasonEvents.length)];
+        // Eventos especiais raros
+        const specialEvents = [
+            { text: "🌟 Eclipse Solar! Todas as habilidades custam 50% menos MP!", effect: "eclipse", duration: 900 },
+            { text: "💫 Chuva de meteoros! XP de combate dobrado!", effect: "meteor_shower", duration: 1800 },
+            { text: "🌙 Lua Cheia! Transformações e habilidades especiais são mais poderosas!", effect: "full_moon", duration: 3600 },
+            { text: "⚡ Tempestade mágica! Todos os atributos temporariamente aumentados!", effect: "magic_storm", duration: 1200 },
+            { text: "🎭 Carnaval dos Deuses! Loot de todos os inimigos triplicado!", effect: "divine_carnival", duration: 2700 }
+        ];
+
+        let eventPool = events[this.season];
         
-        gameManager.ui.showGlobalEvent(event);
+        // 10% de chance de evento especial
+        if (Math.random() < 0.1) {
+            eventPool = specialEvents;
+        }
+
+        const event = eventPool[Math.floor(Math.random() * eventPool.length)];
+        
+        this.activeEvents.push({
+            ...event,
+            startTime: Date.now(),
+            id: Date.now() + Math.random()
+        });
+        
+        gameManager.ui.showGlobalEvent(event.text);
+    }
+
+    updateActiveEvents() {
+        const now = Date.now();
+        this.activeEvents = this.activeEvents.filter(event => {
+            if (event.duration === 0) return false; // Eventos instantâneos
+            return (now - event.startTime) < (event.duration * 1000);
+        });
+    }
+
+    getActiveEventBonuses() {
+        const bonuses = {};
+        this.activeEvents.forEach(event => {
+            bonuses[event.effect] = true;
+        });
+        return bonuses;
     }
 
     getFormattedTime() {
@@ -101,7 +148,8 @@ class WorldManager {
             "Nevando": "ph-bold ph-snowflake",
             "Muito Quente": "ph-bold ph-thermometer-hot",
             "Frio": "ph-bold ph-thermometer-cold",
-            "Ventoso": "ph-bold ph-wind"
+            "Ventoso": "ph-bold ph-wind",
+            "Seco": "ph-bold ph-sun-dim"
         };
         return icons[this.weather] || "ph-bold ph-sun";
     }
@@ -123,6 +171,7 @@ class UIManager {
         this.currentCombat = null;
         this.shop = new Shop();
         this.cacheDOM();
+        this.setupSkillSlots();
     }
 
     cacheDOM() {
@@ -143,6 +192,27 @@ class UIManager {
         this.eventBanner = document.getElementById('global-event-banner');
         this.eventText = document.getElementById('event-text');
         this.combatModal = document.getElementById('combat-modal');
+        
+        // Novos elementos
+        this.equipmentSlots = document.querySelectorAll('.equipment-slot');
+        this.skillSlots = document.querySelectorAll('.skill-slot');
+        this.equipmentAvailable = document.getElementById('equipment-available');
+        this.skillsAvailable = document.getElementById('skills-available');
+        this.structuresContent = document.getElementById('structures-content');
+    }
+
+    setupSkillSlots() {
+        const skillSlotsContainer = document.querySelector('.skill-slots');
+        if (skillSlotsContainer) {
+            skillSlotsContainer.innerHTML = '';
+            for (let i = 0; i < 10; i++) {
+                const slot = document.createElement('div');
+                slot.className = 'skill-slot empty';
+                slot.dataset.slotIndex = i;
+                slot.textContent = `Slot ${i + 1}`;
+                skillSlotsContainer.appendChild(slot);
+            }
+        }
     }
 
     showScreen(screenId) {
@@ -155,10 +225,10 @@ class UIManager {
         this.eventText.textContent = eventText;
         this.eventBanner.classList.remove('hidden');
         
-        // Auto-fechar após 10 segundos
+        // Auto-fechar após 12 segundos
         setTimeout(() => {
             this.eventBanner.classList.add('hidden');
-        }, 10000);
+        }, 12000);
     }
 
     renderStatus(player) {
@@ -180,13 +250,21 @@ class UIManager {
             equipmentHtml += `<div class="stat-line"><span>${slotName}:</span> <span>${itemName}</span></div>`;
         }
 
-        // Habilidades
-        let skillsHtml = player.skills.map(skillId => `<li><span class="rarity-Raro">${DB.skills[skillId].name}</span> - ${DB.skills[skillId].description}</li>`).join('') || '<li>Nenhuma habilidade aprendida</li>';
+        // Habilidades equipadas
+        let equippedSkillsHtml = player.equippedSkills.map(skillId => 
+            `<li><span class="rarity-Raro">${DB.skills[skillId].name}</span> - ${DB.skills[skillId].description}</li>`
+        ).join('') || '<li>Nenhuma habilidade equipada</li>';
 
         // Status Effects
         let statusEffectsHtml = player.statusEffects.map(effect => 
             `<span class="status-effect ${effect.type}">${effect.type} (${effect.duration})</span>`
         ).join('') || '<span>Nenhum efeito ativo</span>';
+
+        // Buffs temporários
+        let tempBuffsHtml = player.getActiveBuffs().map(buff => {
+            const remaining = Math.ceil((buff.duration * 1000 - (Date.now() - buff.startTime)) / 1000);
+            return `<span class="temp-buff ${buff.type}">${buff.type} (${remaining}s)</span>`;
+        }).join('') || '<span>Nenhum buff ativo</span>';
 
         this.statusContent.innerHTML = `
             <div class="status-section">
@@ -212,6 +290,7 @@ class UIManager {
                     ${createStatLine("Ataque", player.getAttack())}
                     ${createStatLine("Defesa", player.getDefense())}
                     ${createStatLine("Agilidade", player.getAgility())}
+                    ${createStatLine("Poder Mágico", player.getMagicPower())}
                 </div>
             </div>
             <div class="status-section">
@@ -219,14 +298,117 @@ class UIManager {
                 <div class="status-grid">${equipmentHtml}</div>
             </div>
             <div class="status-section">
-                <h3>Habilidades Conhecidas</h3>
-                <ul>${skillsHtml}</ul>
+                <h3>Habilidades Equipadas (${player.equippedSkills.length}/${player.maxEquippedSkills})</h3>
+                <ul>${equippedSkillsHtml}</ul>
             </div>
             <div class="status-section">
                 <h3>Efeitos de Status</h3>
                 <div class="status-effects">${statusEffectsHtml}</div>
             </div>
+            <div class="status-section">
+                <h3>Buffs Temporários</h3>
+                <div class="temp-buffs">${tempBuffsHtml}</div>
+            </div>
         `;
+    }
+
+    renderEquipment(player) {
+        // Atualizar slots de equipamentos visuais
+        document.querySelectorAll('.equipment-slot').forEach(slot => {
+            const slotType = slot.dataset.slot;
+            const equippedItem = player.equipment[slotType];
+            
+            slot.classList.toggle('equipped', !!equippedItem);
+            
+            if (equippedItem) {
+                const itemData = DB.items[equippedItem.id];
+                slot.innerHTML = `
+                    <i class="${slot.querySelector('i').className}"></i>
+                    <span class="rarity-${itemData.rarity}">${itemData.name}</span>
+                    <button class="action-button unequip" data-action="unequip" data-slot="${slotType}">Remover</button>
+                `;
+            } else {
+                const originalContent = slot.dataset.originalContent || slot.innerHTML;
+                slot.dataset.originalContent = originalContent;
+                slot.innerHTML = originalContent;
+            }
+        });
+
+        // Mostrar equipamentos disponíveis
+        const availableEquipment = player.inventory.filter(item => 
+            DB.items[item.id].type === 'Equipment'
+        );
+
+        this.equipmentAvailable.innerHTML = '';
+        if (availableEquipment.length === 0) {
+            this.equipmentAvailable.innerHTML = '<p>Nenhum equipamento disponível</p>';
+            return;
+        }
+
+        availableEquipment.forEach(item => {
+            const itemData = DB.items[item.id];
+            const div = document.createElement('div');
+            div.className = 'inventory-item';
+            div.innerHTML = `
+                <span class="item-name rarity-${itemData.rarity}">${itemData.name}</span>
+                <span>${item.quantity}x</span>
+                <span>${itemData.slot}</span>
+                <button class="action-button equip" data-action="equip-equipment" data-item-id="${item.id}">Equipar</button>
+            `;
+            this.equipmentAvailable.appendChild(div);
+        });
+    }
+
+    renderSkills(player) {
+        // Atualizar slots de habilidades visuais
+        document.querySelectorAll('.skill-slot').forEach((slot, index) => {
+            const equippedSkill = player.equippedSkills[index];
+            
+            slot.classList.toggle('equipped', !!equippedSkill);
+            slot.classList.toggle('empty', !equippedSkill);
+            
+            if (equippedSkill) {
+                const skillData = DB.skills[equippedSkill];
+                slot.innerHTML = `
+                    <span class="rarity-${skillData.element || 'Raro'}">${skillData.name}</span>
+                    <button class="action-button unequip" data-action="unequip-skill" data-skill-id="${equippedSkill}">X</button>
+                `;
+            } else {
+                slot.innerHTML = `Slot ${index + 1}`;
+            }
+        });
+
+        // Mostrar habilidades disponíveis
+        this.skillsAvailable.innerHTML = '';
+        if (player.skills.length === 0) {
+            this.skillsAvailable.innerHTML = '<p>Nenhuma habilidade conhecida. Use grimórios para aprender!</p>';
+            return;
+        }
+
+        player.skills.forEach(skillId => {
+            const skillData = DB.skills[skillId];
+            const isEquipped = player.equippedSkills.includes(skillId);
+            const canEquip = !isEquipped && player.equippedSkills.length < player.maxEquippedSkills;
+            
+            const div = document.createElement('div');
+            div.className = 'skill-item';
+            div.innerHTML = `
+                <div>
+                    <strong class="rarity-${skillData.element || 'Raro'}">${skillData.name}</strong>
+                    <span class="skill-element ${skillData.element || 'arcane'}">${skillData.element || 'arcane'}</span>
+                    <br><small>${skillData.description}</small>
+                    <br><small>Custo: ${skillData.cost} MP | Tipo: ${skillData.type}</small>
+                </div>
+                <span>${skillData.type}</span>
+                <span>
+                    ${isEquipped ? 
+                        `<button class="action-button unequip" data-action="unequip-skill" data-skill-id="${skillId}">Desequipar</button>` :
+                        `<button class="action-button equip" data-action="equip-skill" data-skill-id="${skillId}" ${!canEquip ? 'disabled' : ''}>Equipar</button>`
+                    }
+                </span>
+            `;
+            this.skillsAvailable.appendChild(div);
+        });
     }
 
     renderInventory(player) {
@@ -246,11 +428,11 @@ class UIManager {
 
             let useButton = '';
             if (itemData.type === 'Grimoire') {
-                useButton = `<button class="action-button" data-action="use-grimoire" data-item-id="${item.id}">Usar</button>`;
+                useButton = `<button class="action-button use" data-action="use-grimoire" data-item-id="${item.id}">Usar</button>`;
             } else if (itemData.type === 'Consumable') {
-                useButton = `<button class="action-button" data-action="use-consumable" data-item-id="${item.id}">Usar</button>`;
+                useButton = `<button class="action-button use" data-action="use-consumable" data-item-id="${item.id}">Usar</button>`;
             } else if (itemData.type === 'Equipment') {
-                useButton = `<button class="action-button" data-action="equip-item" data-item-id="${item.id}">Equipar</button>`;
+                useButton = `<button class="action-button equip" data-action="equip-item" data-item-id="${item.id}">Equipar</button>`;
             }
 
             li.innerHTML = `
@@ -276,18 +458,22 @@ class UIManager {
             return;
         }
 
+        // Aplicar desconto de estruturas
+        const discount = player.structureBonuses.shop_discount;
+
         this.shop.items.forEach(shopItem => {
             const itemData = DB.items[shopItem.id];
             const div = document.createElement('div');
             div.className = 'shop-item';
 
-            const canBuy = player.gold >= shopItem.price;
+            const finalPrice = Math.floor(shopItem.price * (1 - discount));
+            const canBuy = player.gold >= finalPrice;
             
             div.innerHTML = `
                 <span class="item-name rarity-${itemData.rarity}">${itemData.name}</span>
                 <span>${shopItem.quantity}x</span>
-                <span>${shopItem.price} ouro</span>
-                <button class="action-button" data-action="buy-item" data-item-id="${shopItem.id}" data-price="${shopItem.price}" data-quantity="${shopItem.quantity}" ${!canBuy ? 'disabled' : ''}>Comprar</button>
+                <span>${finalPrice} ouro ${discount > 0 ? `<small>(${Math.floor(discount * 100)}% off)</small>` : ''}</span>
+                <button class="action-button" data-action="buy-item" data-item-id="${shopItem.id}" data-price="${finalPrice}" data-quantity="${shopItem.quantity}" ${!canBuy ? 'disabled' : ''}>Comprar</button>
             `;
             this.shopContent.appendChild(div);
         });
@@ -297,10 +483,15 @@ class UIManager {
         if (!player.profession) {
             let professionsHtml = '<div class="profession-selector">';
             Object.entries(DB.professions).forEach(([id, prof]) => {
+                const bonusText = Object.entries(prof.bonus || {}).map(([key, value]) => 
+                    `${key}: ${typeof value === 'number' ? (value > 1 ? `+${Math.floor((value - 1) * 100)}%` : `+${value}`) : value}`
+                ).join(', ');
+                
                 professionsHtml += `
                     <div class="profession-card" data-action="learn-profession" data-prof-id="${id}">
                         <h4>${prof.name}</h4>
                         <p>${prof.description}</p>
+                        <div class="profession-bonus">Bônus: ${bonusText}</div>
                     </div>
                 `;
             });
@@ -316,6 +507,9 @@ class UIManager {
         const profData = DB.professions[player.profession.id];
         const xpToNext = player.profession.level * 100;
         
+        // Aplicar bônus de velocidade de criação
+        const craftingSpeed = player.structureBonuses.crafting_speed * player.getProfessionBonus('crafting_speed');
+        
         let recipesHtml = '<div class="recipes-list">';
         profData.recipes.forEach(recipe => {
             const canCraft = player.profession.level >= recipe.requiredLevel && player.hasMaterials(recipe.materials);
@@ -324,14 +518,14 @@ class UIManager {
             ).join(', ');
             
             recipesHtml += `
-                <div class="inventory-item">
+                <div class="recipe-item">
                     <div>
                         <strong class="rarity-${DB.items[recipe.result].rarity}">${recipe.name}</strong>
-                        <br><small>Materiais: ${materials}</small>
-                        <br><small>Nível necessário: ${recipe.requiredLevel}</small>
+                        <div class="recipe-materials">Materiais: ${materials}</div>
+                        <div class="recipe-requirements">Nível necessário: ${recipe.requiredLevel}</div>
+                        ${craftingSpeed > 1 ? `<div class="recipe-requirements">Velocidade: +${Math.floor((craftingSpeed - 1) * 100)}%</div>` : ''}
                     </div>
                     <span>+${recipe.xp} XP</span>
-                    <span></span>
                     <button class="action-button" data-action="craft-item" data-recipe-id="${recipe.id}" ${!canCraft ? 'disabled' : ''}>Criar</button>
                 </div>
             `;
@@ -411,6 +605,68 @@ class UIManager {
         this.worldContent.innerHTML = worldHtml;
     }
 
+    renderStructures(player) {
+        const builtStructuresHtml = player.ownedStructures.length > 0 ? 
+            player.ownedStructures.map(structureId => {
+                const structure = DB.structures[structureId];
+                return `
+                    <div class="structure-item">
+                        <div class="structure-info">
+                            <div class="structure-name">${structure.name}</div>
+                            <div class="structure-description">${structure.description}</div>
+                            <div class="structure-bonus">
+                                ${Object.entries(structure.bonus).map(([key, value]) => 
+                                    `${key}: ${typeof value === 'number' ? 
+                                        (value > 1 ? `+${Math.floor((value - 1) * 100)}%` : `+${value}`) : 
+                                        value}`
+                                ).join(', ')}
+                            </div>
+                        </div>
+                        <div class="structure-built">CONSTRUÍDA</div>
+                        <span></span>
+                    </div>
+                `;
+            }).join('') : '<p>Nenhuma estrutura construída.</p>';
+
+        const availableStructuresHtml = Object.entries(DB.structures)
+            .filter(([id]) => !player.ownedStructures.includes(id))
+            .map(([id, structure]) => {
+                const canBuild = player.canBuildStructure(id);
+                const costHtml = Object.entries(structure.cost).map(([itemId, quantity]) => {
+                    if (itemId === 'gold') {
+                        return `<div class="structure-cost-item">💰 ${quantity} ouro</div>`;
+                    } else {
+                        const itemData = DB.items[itemId];
+                        const hasEnough = player.hasItem(itemId, quantity);
+                        return `<div class="structure-cost-item ${hasEnough ? '' : 'insufficient'}">
+                            <span class="rarity-${itemData.rarity}">${itemData.name}</span> x${quantity}
+                        </div>`;
+                    }
+                }).join('');
+
+                return `
+                    <div class="structure-item">
+                        <div class="structure-info">
+                            <div class="structure-name">${structure.name}</div>
+                            <div class="structure-description">${structure.description}</div>
+                            <div class="structure-bonus">
+                                ${Object.entries(structure.bonus).map(([key, value]) => 
+                                    `${key}: ${typeof value === 'number' ? 
+                                        (value > 1 ? `+${Math.floor((value - 1) * 100)}%` : `+${value}`) : 
+                                        value}`
+                                ).join(', ')}
+                            </div>
+                        </div>
+                        <div class="structure-cost">${costHtml}</div>
+                        <button class="action-button" data-action="build-structure" data-structure-id="${id}" ${!canBuild ? 'disabled' : ''}>Construir</button>
+                    </div>
+                `;
+            }).join('');
+
+        document.getElementById('built-structures-list').innerHTML = builtStructuresHtml;
+        document.getElementById('available-structures-list').innerHTML = availableStructuresHtml || '<p>Todas as estruturas já foram construídas!</p>';
+    }
+
     renderCastles(player) {
         let castlesHtml = '<h3>Castelos Disponíveis</h3>';
         
@@ -418,7 +674,7 @@ class UIManager {
         if (player.ownedCastles.length > 0) {
             let totalIncome = 0;
             player.ownedCastles.forEach(castleId => {
-                totalIncome += DB.castles[castleId].income;
+                totalIncome += player.getCastleIncome(castleId);
             });
             
             castlesHtml += `
@@ -433,17 +689,31 @@ class UIManager {
         Object.entries(DB.castles).forEach(([id, castle]) => {
             const owned = player.ownedCastles.includes(id);
             const canBuy = player.gold >= castle.cost && !owned;
+            const level = player.castleLevels[id] || 1;
+            const income = owned ? player.getCastleIncome(id) : castle.income;
+            const canUpgrade = owned && level < castle.maxLevel && player.gold >= (castle.upgradeCost * level);
             
             castlesHtml += `
                 <div class="castle-item">
-                    <div>
-                        <strong>${castle.name}</strong> ${owned ? '(Possuído)' : ''}
-                        <br><small>${castle.description}</small>
-                        <br><small>Nível: ${castle.level} | Renda: ${castle.income} ouro/6h</small>
+                    <div class="castle-info">
+                        <div class="castle-name">${castle.name} ${owned ? '(Possuído)' : ''}</div>
+                        <div class="castle-level">Nível ${level}/${castle.maxLevel}</div>
+                        <div>${castle.description}</div>
+                        <div>Renda: ${income} ouro/6h</div>
                     </div>
-                    <span>Custo: ${castle.cost}</span>
-                    <span></span>
-                    <button class="action-button" data-action="buy-castle" data-castle-id="${id}" ${!canBuy ? 'disabled' : ''}>${owned ? 'Possuído' : 'Comprar'}</button>
+                    <div>
+                        ${owned ? `Nível ${level}` : `Custo: ${castle.cost}`}
+                        ${owned && level < castle.maxLevel ? `<br>Upgrade: ${castle.upgradeCost * level}` : ''}
+                    </div>
+                    <div class="castle-actions">
+                        ${!owned ? 
+                            `<button class="action-button" data-action="buy-castle" data-castle-id="${id}" ${!canBuy ? 'disabled' : ''}>Comprar</button>` :
+                            (level < castle.maxLevel ? 
+                                `<button class="upgrade-button" data-action="upgrade-castle" data-castle-id="${id}" ${!canUpgrade ? 'disabled' : ''}>Melhorar</button>` :
+                                '<span class="structure-built">MAX</span>'
+                            )
+                        }
+                    </div>
                 </div>
             `;
         });
@@ -493,10 +763,10 @@ class UIManager {
             </div>
         `;
 
-        // Ações disponíveis
+        // Ações disponíveis - apenas habilidades equipadas
         let actionsHtml = `<button class="action-button" data-combat-action="attack">Atacar</button>`;
         
-        player.skills.forEach(skillId => {
+        player.equippedSkills.forEach(skillId => {
             const skill = DB.skills[skillId];
             const canUse = player.mp >= skill.cost;
             actionsHtml += `<button class="action-button" data-combat-action="skill" data-skill-id="${skillId}" ${!canUse ? 'disabled' : ''}>${skill.name} (${skill.cost} MP)</button>`;
@@ -536,6 +806,7 @@ class GameManager {
     gameLoop() {
         this.world.update(1);
         this.ui.renderWorldInfo(this.world);
+        this.player.updateStatusEffects();
         
         // Verificar trabalho completo
         if (this.player.currentJob) {
@@ -584,6 +855,46 @@ class GameManager {
             }
         });
 
+        // Equipamentos
+        document.addEventListener('click', (e) => {
+            const action = e.target.dataset.action;
+            
+            if (action === 'equip-equipment') {
+                const itemId = e.target.dataset.itemId;
+                if (this.player.equipItem(itemId)) {
+                    alert('Item equipado!');
+                    this.updateUI('equipment-screen');
+                }
+            } else if (action === 'unequip') {
+                const slot = e.target.dataset.slot;
+                if (this.player.unequipItem(slot)) {
+                    alert('Item removido!');
+                    this.updateUI('equipment-screen');
+                }
+            }
+        });
+
+        // Habilidades
+        document.addEventListener('click', (e) => {
+            const action = e.target.dataset.action;
+            
+            if (action === 'equip-skill') {
+                const skillId = e.target.dataset.skillId;
+                if (this.player.equipSkill(skillId)) {
+                    alert('Habilidade equipada!');
+                    this.updateUI('skills-screen');
+                } else {
+                    alert('Não foi possível equipar a habilidade!');
+                }
+            } else if (action === 'unequip-skill') {
+                const skillId = e.target.dataset.skillId;
+                if (this.player.unequipSkill(skillId)) {
+                    alert('Habilidade removida!');
+                    this.updateUI('skills-screen');
+                }
+            }
+        });
+
         // Inventário
         document.getElementById('inventory-list').addEventListener('click', (e) => {
             const action = e.target.dataset.action;
@@ -594,7 +905,13 @@ class GameManager {
                 alert(message);
                 this.updateUI('inventory-screen');
             } else if (action === 'use-consumable') {
-                this.useConsumable(itemId);
+                const result = this.player.useConsumable(itemId);
+                if (result.success) {
+                    alert(result.message);
+                    this.updateUI('inventory-screen');
+                } else {
+                    alert(result.message);
+                }
             } else if (action === 'equip-item') {
                 if (this.player.equipItem(itemId)) {
                     alert('Item equipado!');
@@ -667,6 +984,20 @@ class GameManager {
             }
         });
 
+        // Estruturas
+        document.addEventListener('click', (e) => {
+            if (e.target.dataset.action === 'build-structure') {
+                const structureId = e.target.dataset.structureId;
+                if (this.player.buildStructure(structureId)) {
+                    const structure = DB.structures[structureId];
+                    alert(`Estrutura construída: ${structure.name}!`);
+                    this.updateUI('structures-screen');
+                } else {
+                    alert('Recursos insuficientes!');
+                }
+            }
+        });
+
         // Castelos
         document.getElementById('castles-content').addEventListener('click', (e) => {
             const action = e.target.dataset.action;
@@ -678,6 +1009,16 @@ class GameManager {
                     this.updateUI('castles-screen');
                 } else {
                     alert('Ouro insuficiente ou castelo já possuído!');
+                }
+            } else if (action === 'upgrade-castle') {
+                const castleId = e.target.dataset.castleId;
+                if (this.player.upgradeCastle(castleId)) {
+                    const castle = DB.castles[castleId];
+                    const newLevel = this.player.castleLevels[castleId];
+                    alert(`${castle.name} melhorado para nível ${newLevel}!`);
+                    this.updateUI('castles-screen');
+                } else {
+                    alert('Ouro insuficiente ou nível máximo atingido!');
                 }
             } else if (action === 'collect-income') {
                 const income = this.player.collectCastleIncome();
@@ -703,31 +1044,6 @@ class GameManager {
                 alert('Você fugiu do combate!');
             }
         });
-    }
-
-    useConsumable(itemId) {
-        const item = DB.items[itemId];
-        if (!item || item.type !== 'Consumable') return;
-        
-        if (!this.player.hasItem(itemId)) return;
-        
-        switch(item.effect) {
-            case 'heal':
-                this.player.heal(item.power);
-                alert(`Você recuperou ${item.power} HP!`);
-                break;
-            case 'mana':
-                this.player.mp = Math.min(this.player.mp + item.power, this.player.getMaxMp());
-                alert(`Você recuperou ${item.power} MP!`);
-                break;
-            case 'cure_poison':
-                this.player.statusEffects = this.player.statusEffects.filter(e => e.type !== STATUS_EFFECTS.POISON);
-                alert('Veneno curado!');
-                break;
-        }
-        
-        this.player.removeItem(itemId, 1);
-        this.updateUI('inventory-screen');
     }
 
     craftItem(recipeId) {
@@ -774,21 +1090,27 @@ class GameManager {
         const area = DB.huntingGrounds[areaId];
         
         // Evento aleatório antes do combate
-        if (Math.random() < 0.2) {
+        if (Math.random() < 0.25) {
             const events = [
-                "Você encontrou um baú escondido!",
-                "Uma emboscada! Inimigo extra aparece!",
-                "Você encontrou algumas moedas no chão!",
-                "Um mercador perdido oferece um desconto!"
+                { text: "Você encontrou um baú escondido!", item: "i008", quantity: 1 },
+                { text: "Uma emboscada! Inimigo extra aparece!", effect: "extra_enemy" },
+                { text: "Você encontrou algumas moedas no chão!", gold: Math.floor(Math.random() * 100) + 50 },
+                { text: "Um mercador perdido oferece um desconto!", effect: "discount" },
+                { text: "Fontes de energia mágica! MP restaurado!", effect: "restore_mp" },
+                { text: "Ervas curativas! HP restaurado!", effect: "restore_hp" }
             ];
             
             const event = events[Math.floor(Math.random() * events.length)];
-            alert(event);
+            alert(event.text);
             
-            if (event.includes("baú")) {
-                this.player.addItem("i008", 1); // Gema azul
-            } else if (event.includes("moedas")) {
-                this.player.gold += Math.floor(Math.random() * 50) + 10;
+            if (event.item) {
+                this.player.addItem(event.item, event.quantity);
+            } else if (event.gold) {
+                this.player.gold += event.gold;
+            } else if (event.effect === "restore_mp") {
+                this.player.mp = this.player.getMaxMp();
+            } else if (event.effect === "restore_hp") {
+                this.player.hp = this.player.getMaxHp();
             }
         }
         
@@ -839,15 +1161,28 @@ class GameManager {
     }
 
     endCombatVictory(enemy) {
+        // Aplicar bônus de eventos ativos
+        const eventBonuses = this.world.getActiveEventBonuses();
+        let xpMultiplier = 1;
+        let lootMultiplier = 1;
+        
+        if (eventBonuses.xp_boost) xpMultiplier = 1.25;
+        if (eventBonuses.meteor_shower) xpMultiplier = 2;
+        if (eventBonuses.divine_carnival) lootMultiplier = 3;
+        if (eventBonuses.luck_boost) lootMultiplier = 1.5;
+        
         // Ganhar XP
-        this.player.gainXp(enemy.xpValue);
+        const baseXp = enemy.xpValue;
+        const finalXp = Math.floor(baseXp * xpMultiplier);
+        const gainedXp = this.player.gainXp(finalXp);
         
         // Loot
-        let lootMessage = `Vitória! Você ganhou ${enemy.xpValue} XP!\n\nItens encontrados:\n`;
+        let lootMessage = `Vitória! Você ganhou ${gainedXp} XP!\n\nItens encontrados:\n`;
         let foundItems = false;
         
         enemy.loot.forEach(lootItem => {
-            if (Math.random() < lootItem.chance) {
+            let chance = lootItem.chance * lootMultiplier;
+            if (Math.random() < chance) {
                 this.player.addItem(lootItem.id, 1);
                 lootMessage += `- ${DB.items[lootItem.id].name}\n`;
                 foundItems = true;
@@ -856,6 +1191,13 @@ class GameManager {
         
         if (!foundItems) {
             lootMessage += "Nenhum item encontrado.";
+        }
+        
+        // Bônus de gold por eventos
+        if (eventBonuses.mining_boost || eventBonuses.adventure_boost) {
+            const bonusGold = Math.floor(Math.random() * 50) + 25;
+            this.player.gold += bonusGold;
+            lootMessage += `\n+${bonusGold} ouro extra do evento!`;
         }
         
         this.ui.endCombat();
@@ -878,6 +1220,12 @@ class GameManager {
             case 'status-screen':
                 this.ui.renderStatus(this.player);
                 break;
+            case 'equipment-screen':
+                this.ui.renderEquipment(this.player);
+                break;
+            case 'skills-screen':
+                this.ui.renderSkills(this.player);
+                break;
             case 'inventory-screen':
                 this.ui.renderInventory(this.player);
                 break;
@@ -892,6 +1240,9 @@ class GameManager {
                 break;
             case 'world-screen':
                 this.ui.renderWorld(this.player);
+                break;
+            case 'structures-screen':
+                this.ui.renderStructures(this.player);
                 break;
             case 'castles-screen':
                 this.ui.renderCastles(this.player);
