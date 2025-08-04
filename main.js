@@ -119,13 +119,13 @@ class WorldManager {
 
 class UIManager {
     constructor() {
-        this.screens = document.querySelectorAll('.screen');
         this.currentCombat = null;
         this.shop = new Shop();
-        this.cacheDOM();
+        // Don't cache DOM in constructor, do it when needed
     }
 
     cacheDOM() {
+        this.screens = document.querySelectorAll('.screen');
         this.hubButtons = document.querySelectorAll('.hub-button');
         this.backButtons = document.querySelectorAll('.back-button');
         this.statusContent = document.getElementById('status-content');
@@ -173,15 +173,30 @@ class UIManager {
 
         // Equipamentos
         let equipmentHtml = ``;
-        for (const slot in player.equipment) {
-            const item = player.equipment[slot];
-            const itemName = item ? `<span class="rarity-${DB.items[item.id].rarity}">${DB.items[item.id].name}</span>` : '---';
-            const slotName = slot.charAt(0).toUpperCase() + slot.slice(1);
-            equipmentHtml += `<div class="stat-line"><span>${slotName}:</span> <span>${itemName}</span></div>`;
+        try {
+            for (const slot in player.equipment) {
+                const item = player.equipment[slot];
+                let itemName = '---';
+                if (item && DB.items[item.id]) {
+                    itemName = `<span class="rarity-${DB.items[item.id].rarity}">${DB.items[item.id].name}</span>`;
+                }
+                const slotName = slot.charAt(0).toUpperCase() + slot.slice(1);
+                equipmentHtml += `<div class="stat-line"><span>${slotName}:</span> <span>${itemName}</span></div>`;
+            }
+        } catch (error) {
+            equipmentHtml = '<div class="stat-line">Erro ao carregar equipamentos</div>';
         }
 
         // Habilidades
-        let skillsHtml = player.skills.map(skillId => `<li><span class="rarity-Raro">${DB.skills[skillId].name}</span> - ${DB.skills[skillId].description}</li>`).join('') || '<li>Nenhuma habilidade aprendida</li>';
+        let skillsHtml = '';
+        try {
+            skillsHtml = player.skills.map(skillId => {
+                const skill = DB.skills[skillId];
+                return skill ? `<li><span class="rarity-Raro">${skill.name}</span> - ${skill.description}</li>` : '';
+            }).filter(Boolean).join('') || '<li>Nenhuma habilidade aprendida</li>';
+        } catch (error) {
+            skillsHtml = '<li>Erro ao carregar habilidades</li>';
+        }
 
         // Status Effects
         let statusEffectsHtml = player.statusEffects.map(effect => 
@@ -518,6 +533,11 @@ class UIManager {
 
 class GameManager {
     constructor() {
+        // Prevent multiple instances
+        if (window.gameManager) {
+            return window.gameManager;
+        }
+        
         this.player = new Player();
         this.world = new WorldManager();
         this.ui = new UIManager();
@@ -527,9 +547,21 @@ class GameManager {
     }
 
     initialize() {
+        // Cache DOM elements
+        this.ui.cacheDOM();
+        
+        if (this.ui.hubButtons.length === 0) {
+            console.error('No hub buttons found!');
+            return;
+        }
+        
+        // Set up event listeners
         this.bindEvents();
+        
+        // Show initial screen
         this.ui.showScreen('hub-screen');
-        this.updateUI();
+        
+        // Start game loop
         setInterval(() => this.gameLoop(), 1000);
     }
 
@@ -555,7 +587,7 @@ class GameManager {
     }
 
     bindEvents() {
-        // Navegação principal
+        // Hub navigation
         this.ui.hubButtons.forEach(button => {
             button.addEventListener('click', () => {
                 const screenId = button.dataset.screen;
@@ -564,6 +596,7 @@ class GameManager {
             });
         });
 
+        // Back buttons
         this.ui.backButtons.forEach(button => {
             button.addEventListener('click', () => {
                 this.ui.showScreen(button.dataset.screen);
@@ -900,4 +933,7 @@ class GameManager {
     }
 }
 
-window.onload = () => new GameManager();
+// Initialize game when window loads
+window.addEventListener('load', () => {
+    new GameManager();
+});
