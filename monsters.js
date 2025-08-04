@@ -1,5 +1,5 @@
 // =================================================================================
-// BANCO DE DADOS DE MONSTROS E SISTEMA DE COMBATE - VERSÃO 0.12
+// BANCO DE DADOS DE MONSTROS E SISTEMA DE COMBATE - VERSÃO 0.14
 // =================================================================================
 
 DB.enemies = {
@@ -246,6 +246,155 @@ DB.enemies = {
         loot: [{ id: 'i023', chance: 0.9 }, { id: 'g015', chance: 0.25 }],
         xpValue: 2500,
         skills: ["time_manipulation", "temporal_loop", "age_acceleration", "chrono_blast"]
+    },
+
+    // ===== NOVOS MONSTROS AVANÇADOS v0.14 =====
+    "m050": {
+        name: "Fênix Renascida", level: 25,
+        stats: { maxHp: 800, strength: 60, agility: 25, defense: 40, magic: 80 },
+        loot: [{ id: 'i031', chance: 0.9 }, { id: 'eq034', chance: 0.1 }, { id: 'g016', chance: 0.05 }],
+        xpValue: 800,
+        skills: ["phoenix_fire", "rebirth", "healing_light", "immortal_flame"]
+    },
+    "m051": {
+        name: "Titã do Tempo", level: 30,
+        stats: { maxHp: 1200, strength: 80, agility: 30, defense: 60, magic: 100 },
+        loot: [{ id: 'i035', chance: 1.0 }, { id: 'eq035', chance: 0.15 }, { id: 'g017', chance: 0.1 }],
+        xpValue: 1200,
+        skills: ["time_manipulation", "temporal_loop", "age_acceleration", "chrono_blast"]
+    },
+    "m052": {
+        name: "Dragão Ancião", level: 35,
+        stats: { maxHp: 2000, strength: 120, agility: 40, defense: 80, magic: 150 },
+        loot: [{ id: 'i013', chance: 1.0 }, { id: 'eq030', chance: 0.2 }, { id: 'g018', chance: 0.15 }],
+        xpValue: 2000,
+        skills: ["ancient_breath", "dragon_roar", "wing_storm", "treasure_hoard"]
+    },
+    "m053": {
+        name: "Lich Supremo", level: 40,
+        stats: { maxHp: 1500, strength: 50, agility: 20, defense: 50, magic: 200 },
+        loot: [{ id: 'i009', chance: 1.0 }, { id: 'eq033', chance: 0.25 }, { id: 'g019', chance: 0.2 }],
+        xpValue: 2500,
+        skills: ["death_wave", "necromancy", "time_stop", "lich_phylactery"]
+    },
+    "m054": {
+        name: "Lobo do Apocalipse", level: 45,
+        stats: { maxHp: 3000, strength: 150, agility: 60, defense: 100, magic: 80 },
+        loot: [{ id: 'i014', chance: 1.0 }, { id: 'eq031', chance: 0.3 }, { id: 'g020', chance: 0.25 }],
+        xpValue: 3500,
+        skills: ["howl_of_doom", "lunar_bite", "pack_leader", "winter_breath"]
+    },
+    "m055": {
+        name: "Kraken Abissal", level: 50,
+        stats: { maxHp: 5000, strength: 200, agility: 30, defense: 150, magic: 120 },
+        loot: [{ id: 'i023', chance: 1.0 }, { id: 'eq032', chance: 0.35 }, { id: 'g021', chance: 0.3 }],
+        xpValue: 5000,
+        skills: ["tentacle_slam", "ink_cloud", "water_vortex", "crushing_grip"]
+    },
+    "m056": {
+        name: "Bahamut", level: 60,
+        stats: { maxHp: 8000, strength: 300, agility: 80, defense: 200, magic: 250 },
+        loot: [{ id: 'i034', chance: 1.0 }, { id: 'eq033', chance: 0.5 }, { id: 'g022', chance: 0.4 }],
+        xpValue: 8000,
+        skills: ["megaflare", "divine_judgment", "king_of_dragons", "celestial_power"]
+    },
+    "m057": {
+        name: "Poseidon", level: 70,
+        stats: { maxHp: 10000, strength: 250, agility: 60, defense: 180, magic: 300 },
+        loot: [{ id: 'i030', chance: 1.0 }, { id: 'eq034', chance: 0.6 }, { id: 'g023', chance: 0.5 }],
+        xpValue: 10000,
+        skills: ["tidal_wave", "abyssal_current", "sea_lord", "crushing_depths"]
+    },
+    "m058": {
+        name: "Lúcifer", level: 80,
+        stats: { maxHp: 15000, strength: 400, agility: 100, defense: 250, magic: 400 },
+        loot: [{ id: 'i026', chance: 1.0 }, { id: 'eq035', chance: 0.7 }, { id: 'g024', chance: 0.6 }],
+        xpValue: 15000,
+        skills: ["inferno", "demonic_legion", "chaos_magic", "hell_portal"]
+    },
+    "m059": {
+        name: "Mimic Dourado", level: 20,
+        stats: { maxHp: 600, strength: 40, agility: 20, defense: 30, magic: 50 },
+        loot: [{ id: 'i010', chance: 1.0 }, { id: 'eq008', chance: 0.8 }, { id: 'g007', chance: 0.5 }],
+        xpValue: 600,
+        skills: ["surprise_attack", "treasure_mimic", "chest_slam"]
+    },
+    "m060": {
+        name: "Fantasma Real", level: 25,
+        stats: { maxHp: 800, strength: 30, agility: 40, defense: 20, magic: 100 },
+        loot: [{ id: 'i022', chance: 1.0 }, { id: 'eq009', chance: 0.3 }, { id: 'g008', chance: 0.2 }],
+        xpValue: 800,
+        skills: ["phase_through", "life_drain", "haunting_wail", "possession"]
+    },
+    "m061": {
+        name: "Quimera", level: 30,
+        stats: { maxHp: 1200, strength: 80, agility: 50, defense: 60, magic: 80 },
+        loot: [{ id: 'i016', chance: 1.0 }, { id: 'eq011', chance: 0.4 }, { id: 'g009', chance: 0.3 }],
+        xpValue: 1200,
+        skills: ["tri_element", "beast_fury", "chimera_roar", "elemental_breath"]
+    },
+    "m062": {
+        name: "Anjo Guardião", level: 35,
+        stats: { maxHp: 1500, strength: 60, agility: 40, defense: 80, magic: 120 },
+        loot: [{ id: 'i021', chance: 1.0 }, { id: 'eq016', chance: 0.5 }, { id: 'g010', chance: 0.4 }],
+        xpValue: 1500,
+        skills: ["divine_shield", "celestial_beam", "guardian_duty", "holy_aura"]
+    },
+    "m063": {
+        name: "Rei Goblin", level: 40,
+        stats: { maxHp: 2000, strength: 100, agility: 60, defense: 70, magic: 60 },
+        loot: [{ id: 'i007', chance: 1.0 }, { id: 'eq005', chance: 0.6 }, { id: 'g011', chance: 0.5 }],
+        xpValue: 2000,
+        skills: ["goblin_army", "royal_command", "treasure_hoard", "crown_bash"]
+    },
+    "m064": {
+        name: "Deus da Destruição", level: 100,
+        stats: { maxHp: 50000, strength: 1000, agility: 200, defense: 500, magic: 1000 },
+        loot: [{ id: 'i028', chance: 1.0 }, { id: 'eq040', chance: 1.0 }, { id: 'g025', chance: 1.0 }],
+        xpValue: 50000,
+        skills: ["world_shatter", "void_magic", "reality_tear", "apocalypse"]
+    },
+    "m065": {
+        name: "Fênix Imortal", level: 90,
+        stats: { maxHp: 30000, strength: 600, agility: 150, defense: 300, magic: 600 },
+        loot: [{ id: 'i027', chance: 1.0 }, { id: 'eq039', chance: 0.8 }, { id: 'g016', chance: 0.7 }],
+        xpValue: 30000,
+        skills: ["rebirth", "phoenix_fire", "healing_light", "immortal_flame"]
+    },
+    "m066": {
+        name: "Cronos", level: 95,
+        stats: { maxHp: 40000, strength: 800, agility: 180, defense: 400, magic: 800 },
+        loot: [{ id: 'i029', chance: 1.0 }, { id: 'eq036', chance: 0.9 }, { id: 'g017', chance: 0.8 }],
+        xpValue: 40000,
+        skills: ["time_manipulation", "temporal_loop", "age_acceleration", "chrono_blast"]
+    },
+    "m067": {
+        name: "Elemental Primordial", level: 55,
+        stats: { maxHp: 4000, strength: 150, agility: 80, defense: 120, magic: 200 },
+        loot: [{ id: 'i024', chance: 1.0 }, { id: 'eq012', chance: 0.4 }, { id: 'g012', chance: 0.3 }],
+        xpValue: 4000,
+        skills: ["elemental_fury", "primal_force", "nature_wrath", "elemental_storm"]
+    },
+    "m068": {
+        name: "Dragão de Cristal", level: 65,
+        stats: { maxHp: 12000, strength: 350, agility: 100, defense: 250, magic: 300 },
+        loot: [{ id: 'i008', chance: 1.0 }, { id: 'eq013', chance: 0.6 }, { id: 'g013', chance: 0.5 }],
+        xpValue: 12000,
+        skills: ["crystal_breath", "gem_storm", "crystal_barrier", "prismatic_blast"]
+    },
+    "m069": {
+        name: "Necromante Supremo", level: 75,
+        stats: { maxHp: 18000, strength: 200, agility: 80, defense: 150, magic: 500 },
+        loot: [{ id: 'i022', chance: 1.0 }, { id: 'eq014', chance: 0.7 }, { id: 'g014', chance: 0.6 }],
+        xpValue: 18000,
+        skills: ["death_mastery", "soul_harvest", "undead_legion", "necromantic_ritual"]
+    },
+    "m070": {
+        name: "Titã da Guerra", level: 85,
+        stats: { maxHp: 25000, strength: 700, agility: 120, defense: 350, magic: 200 },
+        loot: [{ id: 'i033', chance: 1.0 }, { id: 'eq037', chance: 0.8 }, { id: 'g015', chance: 0.7 }],
+        xpValue: 25000,
+        skills: ["war_cry", "titan_strength", "battle_fury", "weapon_mastery"]
     }
 };
 
