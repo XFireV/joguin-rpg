@@ -15,6 +15,17 @@
   --rarity-reliquia: #a335ee;
   --rarity-lendario: #ff80ed;
   --rarity-mitico: #ff0000;
+
+  /* Cores de Elementos */
+  --element-fire: #ff4500;
+  --element-ice: #87ceeb;
+  --element-lightning: #ffd700;
+  --element-earth: #8b4513;
+  --element-water: #0088ff;
+  --element-wind: #90ee90;
+  --element-light: #ffffe0;
+  --element-dark: #483d8b;
+  --element-arcane: #9370db;
 }
 
 * {
@@ -114,7 +125,7 @@ body {
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 20px;
   width: 100%;
-  max-width: 800px;
+  max-width: 900px;
 }
 .hub-button {
   background-color: transparent;
@@ -171,6 +182,282 @@ body {
 .back-button:hover {
   background-color: var(--color-interactive);
   color: var(--color-bg);
+}
+
+/* ===== SISTEMA DE EQUIPAMENTOS ===== */
+#equipment-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  height: 100%;
+}
+
+.equipment-slots {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 15px;
+  padding: 20px;
+  background-color: rgba(0,0,0,0.3);
+  border-radius: 10px;
+  border: 2px solid var(--color-border);
+}
+
+.equipment-slot {
+  aspect-ratio: 1;
+  background-color: var(--color-panel);
+  border: 2px solid var(--color-border);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  padding: 10px;
+}
+
+.equipment-slot:hover {
+  border-color: var(--color-interactive);
+  background-color: rgba(159, 80, 255, 0.1);
+}
+
+.equipment-slot.equipped {
+  border-color: var(--color-interactive);
+  background-color: rgba(159, 80, 255, 0.2);
+}
+
+.equipment-slot i {
+  font-size: 2em;
+  color: var(--color-text-secondary);
+  margin-bottom: 5px;
+}
+
+.equipment-slot span {
+  font-size: 0.8em;
+  text-align: center;
+  color: var(--color-text-secondary);
+}
+
+.equipment-slot .equipped-item {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: var(--color-interactive);
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7em;
+}
+
+.equipment-inventory {
+  background-color: rgba(0,0,0,0.2);
+  border-radius: 10px;
+  padding: 20px;
+  border: 1px solid var(--color-border);
+}
+
+.equipment-inventory h3 {
+  margin-bottom: 15px;
+  color: var(--color-interactive-hover);
+  text-align: center;
+}
+
+/* ===== SISTEMA DE HABILIDADES ===== */
+#skills-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  height: 100%;
+}
+
+.equipped-skills {
+  background-color: rgba(0,0,0,0.2);
+  border-radius: 10px;
+  padding: 20px;
+  border: 1px solid var(--color-border);
+}
+
+.equipped-skills h3 {
+  margin-bottom: 15px;
+  color: var(--color-interactive-hover);
+  text-align: center;
+}
+
+.skill-slots {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.skill-slot {
+  aspect-ratio: 1;
+  background-color: var(--color-panel);
+  border: 2px solid var(--color-border);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  font-size: 0.8em;
+  text-align: center;
+}
+
+.skill-slot:hover {
+  border-color: var(--color-interactive);
+  background-color: rgba(159, 80, 255, 0.1);
+}
+
+.skill-slot.equipped {
+  border-color: var(--color-interactive);
+  background-color: rgba(159, 80, 255, 0.2);
+}
+
+.skill-slot.empty {
+  color: var(--color-text-secondary);
+  font-style: italic;
+}
+
+.available-skills {
+  background-color: rgba(0,0,0,0.2);
+  border-radius: 10px;
+  padding: 20px;
+  border: 1px solid var(--color-border);
+}
+
+.available-skills h3 {
+  margin-bottom: 15px;
+  color: var(--color-interactive-hover);
+  text-align: center;
+}
+
+.skill-item {
+  display: grid;
+  grid-template-columns: 2fr 1fr auto;
+  gap: 10px;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid var(--color-border);
+  transition: background-color 0.2s ease;
+}
+
+.skill-item:hover {
+  background-color: rgba(159, 80, 255, 0.1);
+}
+
+.skill-element {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 0.7em;
+  margin-left: 5px;
+}
+
+.skill-element.fire { background-color: var(--element-fire); }
+.skill-element.ice { background-color: var(--element-ice); color: black; }
+.skill-element.lightning { background-color: var(--element-lightning); color: black; }
+.skill-element.earth { background-color: var(--element-earth); }
+.skill-element.water { background-color: var(--element-water); }
+.skill-element.wind { background-color: var(--element-wind); color: black; }
+.skill-element.light { background-color: var(--element-light); color: black; }
+.skill-element.dark { background-color: var(--element-dark); }
+.skill-element.arcane { background-color: var(--element-arcane); }
+
+/* ===== SISTEMA DE ESTRUTURAS ===== */
+#structures-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.structures-info {
+  text-align: center;
+  padding: 20px;
+  background-color: rgba(159, 80, 255, 0.1);
+  border-radius: 8px;
+  border: 1px solid var(--color-interactive);
+}
+
+.structures-info h3 {
+  color: var(--color-interactive-hover);
+  margin-bottom: 10px;
+}
+
+#built-structures, #available-structures {
+  background-color: rgba(0,0,0,0.2);
+  border-radius: 10px;
+  padding: 20px;
+  border: 1px solid var(--color-border);
+}
+
+#built-structures h4, #available-structures h4 {
+  margin-bottom: 15px;
+  color: var(--color-interactive-hover);
+  text-align: center;
+}
+
+.structure-item {
+  display: grid;
+  grid-template-columns: 2fr 1fr auto;
+  gap: 15px;
+  align-items: center;
+  padding: 15px;
+  border-bottom: 1px solid var(--color-border);
+  transition: background-color 0.2s ease;
+}
+
+.structure-item:hover {
+  background-color: rgba(159, 80, 255, 0.1);
+}
+
+.structure-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.structure-name {
+  font-weight: bold;
+  color: var(--color-text-primary);
+  margin-bottom: 5px;
+}
+
+.structure-description {
+  font-size: 0.9em;
+  color: var(--color-text-secondary);
+  margin-bottom: 5px;
+}
+
+.structure-bonus {
+  font-size: 0.8em;
+  color: var(--color-interactive-hover);
+  font-style: italic;
+}
+
+.structure-cost {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.structure-cost-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.9em;
+}
+
+.structure-built {
+  color: var(--rarity-lendario);
+  font-weight: bold;
 }
 
 /* Painel de Status Consolidado */
@@ -240,6 +527,51 @@ body {
   font-weight: bold;
 }
 
+/* Sistema de Castelos Expandido */
+.castle-item {
+  grid-template-columns: 2fr 1fr 1fr auto;
+}
+
+.castle-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.castle-name {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.castle-level {
+  font-size: 0.9em;
+  color: var(--color-interactive-hover);
+}
+
+.castle-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.upgrade-button {
+  background-color: var(--color-interactive);
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 0.8em;
+}
+
+.upgrade-button:hover {
+  background-color: var(--color-interactive-hover);
+}
+
+.upgrade-button:disabled {
+  background-color: #555;
+  cursor: not-allowed;
+}
+
 /* Classes de Raridade */
 .rarity-Comum { color: var(--rarity-comum); }
 .rarity-Incomum { color: var(--rarity-incomum); }
@@ -258,6 +590,7 @@ body {
   border-radius: 3px;
   cursor: pointer;
   font-size: 0.9em;
+  transition: background-color 0.2s ease;
 }
 .action-button:hover {
   background-color: var(--color-interactive-hover);
@@ -265,6 +598,18 @@ body {
 .action-button:disabled {
   background-color: #555;
   cursor: not-allowed;
+}
+
+.action-button.equip {
+  background-color: var(--rarity-raro);
+}
+
+.action-button.unequip {
+  background-color: #cc4444;
+}
+
+.action-button.use {
+  background-color: var(--rarity-incomum);
 }
 
 /* Modal de Combate */
@@ -288,7 +633,7 @@ body {
   border: 2px solid var(--color-border);
   border-radius: 10px;
   padding: 30px;
-  max-width: 600px;
+  max-width: 700px;
   width: 90%;
   max-height: 80%;
   overflow-y: auto;
@@ -324,7 +669,7 @@ body {
 /* Profissões e Trabalhos */
 .profession-selector, .job-selector {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 15px;
   margin-bottom: 20px;
 }
@@ -340,6 +685,44 @@ body {
 .profession-card:hover, .job-card:hover {
   border-color: var(--color-interactive);
   background-color: rgba(159, 80, 255, 0.1);
+}
+
+.profession-bonus {
+  margin-top: 10px;
+  padding: 5px;
+  background-color: rgba(159, 80, 255, 0.2);
+  border-radius: 3px;
+  font-size: 0.8em;
+  color: var(--color-interactive-hover);
+}
+
+.recipes-list {
+  margin-top: 15px;
+}
+
+.recipe-item {
+  display: grid;
+  grid-template-columns: 2fr 1fr auto;
+  gap: 10px;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.recipe-item:hover {
+  background-color: rgba(159, 80, 255, 0.1);
+}
+
+.recipe-materials {
+  font-size: 0.8em;
+  color: var(--color-text-secondary);
+  margin-top: 5px;
+}
+
+.recipe-requirements {
+  font-size: 0.7em;
+  color: var(--color-text-secondary);
+  font-style: italic;
 }
 
 /* Painel do Mundo */
@@ -382,6 +765,115 @@ body {
 .status-effect.root { background-color: #88ff44; color: black; }
 .status-effect.fear { background-color: #8844ff; }
 .status-effect.charm { background-color: #ff88ff; }
+.status-effect.bleed { background-color: #cc2222; }
+.status-effect.curse { background-color: #663366; }
+.status-effect.weakness { background-color: #996633; }
+.status-effect.terror { background-color: #330033; }
+.status-effect.doom { background-color: #000000; }
+
+/* Buffs Temporários */
+.temp-buffs {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  margin-top: 5px;
+}
+
+.temp-buff {
+  background-color: var(--color-interactive);
+  color: white;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 0.8em;
+}
+
+.temp-buff.buff_strength { background-color: #ff6b35; }
+.temp-buff.buff_agility { background-color: #00ff88; }
+.temp-buff.buff_intelligence { background-color: #4169e1; }
+.temp-buff.xp_boost { background-color: #ffd700; color: black; }
+.temp-buff.luck_boost { background-color: #ff69b4; }
+
+/* Tooltips */
+.tooltip {
+  position: relative;
+  cursor: help;
+}
+
+.tooltip:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0,0,0,0.9);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 0.8em;
+  white-space: nowrap;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+/* Animações */
+@keyframes levelUp {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.level-up-animation {
+  animation: levelUp 0.5s ease-in-out;
+}
+
+@keyframes itemGet {
+  0% { opacity: 0; transform: translateY(-20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.item-get-animation {
+  animation: itemGet 0.3s ease-out;
+}
+
+@keyframes criticalHit {
+  0% { color: var(--color-text-primary); }
+  50% { color: #ff0000; text-shadow: 0 0 10px #ff0000; }
+  100% { color: var(--color-text-primary); }
+}
+
+.critical-hit {
+  animation: criticalHit 0.5s ease-in-out;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .hub-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  #equipment-layout, #skills-layout {
+    grid-template-columns: 1fr;
+  }
+  
+  .equipment-slots {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+  }
+  
+  .skill-slots {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+  }
+  
+  .status-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .inventory-item, .shop-item, .job-item, .hunt-area, .castle-item, .structure-item {
+    grid-template-columns: 1fr;
+    gap: 5px;
+  }
+}
 
 #changelog-content ul {
   list-style-position: inside;
@@ -396,4 +888,22 @@ body {
 }
 #changelog-content strong {
   color: var(--color-interactive-hover);
+}
+
+/* Scrollbars personalizadas */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-panel);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-interactive);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-interactive-hover);
 }

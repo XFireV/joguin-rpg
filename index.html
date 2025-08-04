@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RPG - Sistema Completo v0.1</title>
+    <title>RPG - Sistema Completo v0.12</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://unpkg.com/@phosphor-icons/web@2.0.3"></script>
 </head>
@@ -22,11 +22,14 @@
             <h1>Seu Legado</h1>
             <div class="hub-grid">
                 <button class="hub-button" data-screen="status-screen"><i class="ph-bold ph-user-circle"></i>Status</button>
+                <button class="hub-button" data-screen="equipment-screen"><i class="ph-bold ph-shield-check"></i>Equipamentos</button>
+                <button class="hub-button" data-screen="skills-screen"><i class="ph-bold ph-magic-wand"></i>Habilidades</button>
                 <button class="hub-button" data-screen="inventory-screen"><i class="ph-bold ph-backpack"></i>Inventário</button>
                 <button class="hub-button" data-screen="shop-screen"><i class="ph-bold ph-storefront"></i>Loja</button>
                 <button class="hub-button" data-screen="profession-screen"><i class="ph-bold ph-hammer"></i>Profissão</button>
                 <button class="hub-button" data-screen="jobs-screen"><i class="ph-bold ph-briefcase"></i>Trabalho</button>
                 <button class="hub-button" data-screen="world-screen"><i class="ph-bold ph-map-trifold"></i>Mundo</button>
+                <button class="hub-button" data-screen="structures-screen"><i class="ph-bold ph-buildings"></i>Estruturas</button>
                 <button class="hub-button" data-screen="castles-screen"><i class="ph-bold ph-castle-turret"></i>Castelos</button>
                 <button class="hub-button" data-screen="changelog-screen"><i class="ph-bold ph-scroll"></i>Atualizações</button>
             </div>
@@ -36,6 +39,76 @@
             <button class="back-button" data-screen="hub-screen"><i class="ph ph-arrow-left"></i> Voltar</button>
             <h2>Status do Personagem</h2>
             <div id="status-content" class="panel"></div>
+        </div>
+
+        <div id="equipment-screen" class="screen">
+            <button class="back-button" data-screen="hub-screen"><i class="ph ph-arrow-left"></i> Voltar</button>
+            <h2>Equipamentos</h2>
+            <div class="panel">
+                <div id="equipment-layout">
+                    <div class="equipment-slots">
+                        <div class="equipment-slot" data-slot="head">
+                            <i class="ph-bold ph-baseball-cap"></i>
+                            <span>Cabeça</span>
+                        </div>
+                        <div class="equipment-slot" data-slot="weapon">
+                            <i class="ph-bold ph-sword"></i>
+                            <span>Arma</span>
+                        </div>
+                        <div class="equipment-slot" data-slot="offhand">
+                            <i class="ph-bold ph-shield"></i>
+                            <span>Escudo</span>
+                        </div>
+                        <div class="equipment-slot" data-slot="chest">
+                            <i class="ph-bold ph-shirt"></i>
+                            <span>Peito</span>
+                        </div>
+                        <div class="equipment-slot" data-slot="legs">
+                            <i class="ph-bold ph-pants"></i>
+                            <span>Pernas</span>
+                        </div>
+                        <div class="equipment-slot" data-slot="feet">
+                            <i class="ph-bold ph-sneaker"></i>
+                            <span>Pés</span>
+                        </div>
+                        <div class="equipment-slot" data-slot="ring1">
+                            <i class="ph-bold ph-ring"></i>
+                            <span>Anel 1</span>
+                        </div>
+                        <div class="equipment-slot" data-slot="ring2">
+                            <i class="ph-bold ph-ring"></i>
+                            <span>Anel 2</span>
+                        </div>
+                        <div class="equipment-slot" data-slot="necklace">
+                            <i class="ph-bold ph-diamond"></i>
+                            <span>Colar</span>
+                        </div>
+                    </div>
+                    <div class="equipment-inventory">
+                        <h3>Equipamentos Disponíveis</h3>
+                        <div id="equipment-available"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="skills-screen" class="screen">
+            <button class="back-button" data-screen="hub-screen"><i class="ph ph-arrow-left"></i> Voltar</button>
+            <h2>Habilidades</h2>
+            <div class="panel">
+                <div id="skills-layout">
+                    <div class="equipped-skills">
+                        <h3>Habilidades Equipadas (Máximo 10)</h3>
+                        <div class="skill-slots">
+                            <!-- 10 skill slots -->
+                        </div>
+                    </div>
+                    <div class="available-skills">
+                        <h3>Habilidades Conhecidas</h3>
+                        <div id="skills-available"></div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div id="inventory-screen" class="screen">
@@ -74,6 +147,27 @@
             <div class="panel" id="world-content"></div>
         </div>
 
+        <div id="structures-screen" class="screen">
+            <button class="back-button" data-screen="hub-screen"><i class="ph ph-arrow-left"></i> Voltar</button>
+            <h2>Estruturas</h2>
+            <div class="panel">
+                <div id="structures-content">
+                    <div class="structures-info">
+                        <h3>Construa estruturas para obter bônus permanentes!</h3>
+                        <p>As estruturas fornecem bônus passivos que melhoram sua produtividade e atributos.</p>
+                    </div>
+                    <div id="built-structures">
+                        <h4>Estruturas Construídas</h4>
+                        <div id="built-structures-list"></div>
+                    </div>
+                    <div id="available-structures">
+                        <h4>Estruturas Disponíveis</h4>
+                        <div id="available-structures-list"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div id="castles-screen" class="screen">
             <button class="back-button" data-screen="hub-screen"><i class="ph ph-arrow-left"></i> Voltar</button>
             <h2>Castelos</h2>
@@ -84,7 +178,25 @@
             <button class="back-button" data-screen="hub-screen"><i class="ph ph-arrow-left"></i> Voltar</button>
             <h2>Notas de Atualização</h2>
             <div class="panel" id="changelog-content">
-                <h3>Versão Atual (v0.1)</h3>
+                <h3>Versão Atual (v0.12) - NOVA VERSÃO!</h3>
+                <ul>
+                    <li><strong>🎮 Sistema de Equipamentos Visuais:</strong> Slots de equipamentos organizados com inventário separado</li>
+                    <li><strong>⚔️ Sistema de Habilidades Equipáveis:</strong> Equipe até 10 habilidades ativas</li>
+                    <li><strong>🏗️ Sistema de Estruturas:</strong> Construa estruturas no mundo para bônus passivos</li>
+                    <li><strong>🏰 Castelos com Níveis:</strong> Castelos agora podem ser melhorados</li>
+                    <li><strong>🔥 100+ Novos Itens:</strong> Equipamentos, consumíveis e materiais</li>
+                    <li><strong>⚡ 50+ Novas Habilidades:</strong> Magias e técnicas de combate</li>
+                    <li><strong>🐉 30+ Novos Monstros:</strong> Criaturas únicas com habilidades especiais</li>
+                    <li><strong>🌟 Novas Profissões:</strong> Runas, Joalheria, Cozinha e mais</li>
+                    <li><strong>🎯 Eventos Expandidos:</strong> Eventos especiais sazonais</li>
+                    <li><strong>💎 Sistema de Joias:</strong> Anéis e colares com efeitos especiais</li>
+                    <li><strong>🧪 Alquimia Avançada:</strong> Novas poções e elixires poderosos</li>
+                    <li><strong>🏭 Estruturas de Produção:</strong> Forjas, laboratórios e mais</li>
+                </ul>
+                
+                <hr>
+                
+                <h3>Versão Anterior (v0.1)</h3>
                 <ul>
                     <li><strong>Sistema de Raridade Completo:</strong> 7 níveis de raridade com cores distintas (Comum a Mítico)</li>
                     <li><strong>Sistema de Profissões Expandido:</strong> 5 profissões disponíveis com receitas progressivas</li>
@@ -121,8 +233,8 @@
     </div>
 
     <script src="items.js"></script>
-    <script src="monsters.js"></script>
     <script src="player.js"></script>
+    <script src="monsters.js"></script>
     <script src="main.js"></script>
 </body>
 </html>
