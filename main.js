@@ -190,39 +190,55 @@ class UIManager {
     }
 
     cacheDOM() {
-        // Aguardar um pouco para garantir que o DOM esteja pronto
-        setTimeout(() => {
-            this.hubButtons = document.querySelectorAll('.hub-button');
-            this.backButtons = document.querySelectorAll('.back-button');
-            this.statusContent = document.getElementById('status-content');
-            this.inventoryWeight = document.getElementById('inventory-weight');
-            this.inventoryList = document.getElementById('inventory-list');
-            this.shopContent = document.getElementById('shop-content');
-            this.shopTimer = document.getElementById('shop-timer');
-            this.professionContent = document.getElementById('profession-content');
-            this.jobsContent = document.getElementById('jobs-content');
-            this.worldContent = document.getElementById('world-content');
-            this.castlesContent = document.getElementById('castles-content');
-            this.timeDisplay = document.getElementById('time-display');
-            this.weatherDisplay = document.getElementById('weather-display');
-            this.seasonDisplay = document.getElementById('season-display');
-            this.eventBanner = document.getElementById('global-event-banner');
-            this.eventText = document.getElementById('event-text');
-            this.combatModal = document.getElementById('combat-modal');
-            
-            // Novos elementos
-            this.equipmentSlots = document.querySelectorAll('.equipment-slot');
-            this.skillSlots = document.querySelectorAll('.skill-slot');
-            this.equipmentAvailable = document.getElementById('equipment-available');
-            this.skillsAvailable = document.getElementById('skills-available');
-            this.structuresContent = document.getElementById('structures-content');
-            
-            console.log('DOM cacheado:', {
-                hubButtons: this.hubButtons.length,
-                backButtons: this.backButtons.length,
-                screens: this.screens.length
-            });
-        }, 100);
+        console.log('🔍 Cacheando elementos do DOM...');
+        
+        // Cachear elementos imediatamente
+        this.hubButtons = document.querySelectorAll('.hub-button');
+        this.backButtons = document.querySelectorAll('.back-button');
+        this.statusContent = document.getElementById('status-content');
+        this.inventoryWeight = document.getElementById('inventory-weight');
+        this.inventoryList = document.getElementById('inventory-list');
+        this.shopContent = document.getElementById('shop-content');
+        this.shopTimer = document.getElementById('shop-timer');
+        this.professionContent = document.getElementById('profession-content');
+        this.jobsContent = document.getElementById('jobs-content');
+        this.worldContent = document.getElementById('world-content');
+        this.castlesContent = document.getElementById('castles-content');
+        this.timeDisplay = document.getElementById('time-display');
+        this.weatherDisplay = document.getElementById('weather-display');
+        this.seasonDisplay = document.getElementById('season-display');
+        this.eventBanner = document.getElementById('global-event-banner');
+        this.eventText = document.getElementById('event-text');
+        this.combatModal = document.getElementById('combat-modal');
+        
+        // Novos elementos
+        this.equipmentSlots = document.querySelectorAll('.equipment-slot');
+        this.skillSlots = document.querySelectorAll('.skill-slot');
+        this.equipmentAvailable = document.getElementById('equipment-available');
+        this.skillsAvailable = document.getElementById('skills-available');
+        this.structuresContent = document.getElementById('structures-content');
+        
+        console.log('✅ DOM cacheado:', {
+            hubButtons: this.hubButtons.length,
+            backButtons: this.backButtons.length,
+            screens: this.screens.length,
+            statusContent: !!this.statusContent,
+            worldContent: !!this.worldContent
+        });
+        
+        // Verificar se elementos críticos foram encontrados
+        if (this.hubButtons.length === 0) {
+            console.warn('⚠️ Nenhum hub button encontrado!');
+        }
+        if (this.backButtons.length === 0) {
+            console.warn('⚠️ Nenhum back button encontrado!');
+        }
+        if (!this.statusContent) {
+            console.warn('⚠️ Status content não encontrado!');
+        }
+        if (!this.worldContent) {
+            console.warn('⚠️ World content não encontrado!');
+        }
     }
 
     setupSkillSlots() {
@@ -240,9 +256,25 @@ class UIManager {
     }
 
     showScreen(screenId) {
+        console.log('🖥️ Mostrando tela:', screenId);
+        
+        // Verificar se a tela existe
+        const targetScreen = document.getElementById(screenId);
+        if (!targetScreen) {
+            console.error('❌ Tela não encontrada:', screenId);
+            return false;
+        }
+        
+        // Esconder todas as telas
         this.screens.forEach(screen => {
-            screen.classList.toggle('active', screen.id === screenId);
+            screen.classList.remove('active');
         });
+        
+        // Mostrar tela selecionada
+        targetScreen.classList.add('active');
+        console.log('✅ Tela ativada:', screenId);
+        
+        return true;
     }
 
     showGlobalEvent(eventText) {
@@ -256,14 +288,22 @@ class UIManager {
     }
 
     renderStatus(player) {
-        const createStatLine = (label, value) => `<div class="stat-line"><span>${label}:</span> <span>${value}</span></div>`;
+        console.log('📊 Renderizando status do jogador...');
+        
+        try {
+            if (!this.statusContent) {
+                console.error('❌ Status content não encontrado!');
+                return;
+            }
+            
+            const createStatLine = (label, value) => `<div class="stat-line"><span>${label}:</span> <span>${value}</span></div>`;
 
-        // Atributos
-        let attributesHtml = ``;
-        for (const stat in player.stats) {
-            const statName = stat.charAt(0).toUpperCase() + stat.slice(1);
-            attributesHtml += `<div class="stat-line"><span>${statName}:</span> <span>${player.stats[stat]} <button data-stat="${stat}" ${player.attributePoints === 0 ? 'disabled' : ''}>+</button></span></div>`;
-        }
+            // Atributos
+            let attributesHtml = ``;
+            for (const stat in player.stats) {
+                const statName = stat.charAt(0).toUpperCase() + stat.slice(1);
+                attributesHtml += `<div class="stat-line"><span>${statName}:</span> <span>${player.stats[stat]} <button data-stat="${stat}" ${player.attributePoints === 0 ? 'disabled' : ''}>+</button></span></div>`;
+            }
 
         // Equipamentos
         let equipmentHtml = ``;
@@ -334,6 +374,11 @@ class UIManager {
                 <div class="temp-buffs">${tempBuffsHtml}</div>
             </div>
         `;
+        
+        console.log('✅ Status renderizado com sucesso!');
+        } catch (error) {
+            console.error('❌ Erro ao renderizar status:', error);
+        }
     }
 
     renderEquipment(player) {
@@ -609,24 +654,41 @@ class UIManager {
     }
 
     renderWorld(player) {
-        let worldHtml = '<h3>Campos de Caça</h3>';
+        console.log('🌍 Renderizando tela do mundo...');
         
-        Object.entries(DB.huntingGrounds).forEach(([id, area]) => {
-            worldHtml += `
-                <div class="hunt-area">
-                    <div>
-                        <strong>${area.name}</strong>
-                        <br><small>${area.description}</small>
-                        <br><small>Nível recomendado: ${area.levelRange}</small>
+        try {
+            if (!this.worldContent) {
+                console.error('❌ World content não encontrado!');
+                return;
+            }
+            
+            if (!DB.huntingGrounds) {
+                console.error('❌ DB.huntingGrounds não encontrado!');
+                return;
+            }
+            
+            let worldHtml = '<h3>Campos de Caça</h3>';
+            
+            Object.entries(DB.huntingGrounds).forEach(([id, area]) => {
+                worldHtml += `
+                    <div class="hunt-area">
+                        <div>
+                            <strong>${area.name}</strong>
+                            <br><small>${area.description}</small>
+                            <br><small>Nível recomendado: ${area.levelRange}</small>
+                        </div>
+                        <span></span>
+                        <span></span>
+                        <button class="action-button" data-action="enter-hunting-ground" data-area-id="${id}">Explorar</button>
                     </div>
-                    <span></span>
-                    <span></span>
-                    <button class="action-button" data-action="enter-hunting-ground" data-area-id="${id}">Explorar</button>
-                </div>
-            `;
-        });
+                `;
+            });
 
-        this.worldContent.innerHTML = worldHtml;
+            this.worldContent.innerHTML = worldHtml;
+            console.log('✅ Mundo renderizado com sucesso!');
+        } catch (error) {
+            console.error('❌ Erro ao renderizar mundo:', error);
+        }
     }
 
     renderStructures(player) {
@@ -818,6 +880,11 @@ class GameManager {
     }
 
     initialize() {
+        console.log('🚀 Inicializando jogo...');
+        
+        // Configurar navegação imediatamente
+        this.setupNavigation();
+        
         // Aguardar um pouco mais para garantir que tudo esteja carregado
         setTimeout(() => {
             this.bindEvents();
@@ -825,7 +892,60 @@ class GameManager {
             this.updateUI();
             setInterval(() => this.gameLoop(), 1000);
             console.log('✅ Jogo inicializado com sucesso!');
-        }, 200);
+        }, 100);
+    }
+
+    setupNavigation() {
+        console.log('🔧 Configurando navegação...');
+        
+        // Navegação principal - hub buttons
+        const hubButtons = document.querySelectorAll('.hub-button');
+        hubButtons.forEach((button) => {
+            // Remover event listeners existentes para evitar duplicação
+            button.removeEventListener('click', button._navigationHandler);
+            
+            // Criar novo handler
+            button._navigationHandler = () => {
+                console.log('🎯 Botão clicado:', button.textContent.trim());
+                const screenId = button.dataset.screen;
+                console.log('🎯 Mudando para tela:', screenId);
+                
+                if (screenId) {
+                    this.ui.showScreen(screenId);
+                    this.updateUI(screenId);
+                    console.log('✅ Navegação realizada para:', screenId);
+                } else {
+                    console.error('❌ Screen ID não encontrado para botão:', button.textContent.trim());
+                }
+            };
+            
+            button.addEventListener('click', button._navigationHandler);
+        });
+        
+        // Navegação de volta - back buttons
+        const backButtons = document.querySelectorAll('.back-button');
+        backButtons.forEach((button) => {
+            // Remover event listeners existentes para evitar duplicação
+            button.removeEventListener('click', button._backHandler);
+            
+            // Criar novo handler
+            button._backHandler = () => {
+                console.log('🎯 Botão voltar clicado');
+                const screenId = button.dataset.screen;
+                
+                if (screenId) {
+                    this.ui.showScreen(screenId);
+                    this.updateUI(screenId);
+                    console.log('✅ Voltou para tela:', screenId);
+                } else {
+                    console.error('❌ Screen ID não encontrado para botão voltar');
+                }
+            };
+            
+            button.addEventListener('click', button._backHandler);
+        });
+        
+        console.log(`✅ Navegação configurada: ${hubButtons.length} hub buttons, ${backButtons.length} back buttons`);
     }
 
     gameLoop() {
@@ -853,30 +973,19 @@ class GameManager {
     bindEvents() {
         console.log('Configurando event listeners...');
         
+        // Configurar navegação imediatamente
+        this.setupNavigation();
+        
         // Aguardar um pouco para garantir que os elementos existam
         setTimeout(() => {
             this.ui.hubButtons = document.querySelectorAll('.hub-button');
             this.ui.backButtons = document.querySelectorAll('.back-button');
             
             console.log('hubButtons encontrados:', this.ui.hubButtons.length);
-            
-            // Navegação principal
-            this.ui.hubButtons.forEach((button) => {
-                button.addEventListener('click', () => {
-                    console.log('Botão clicado:', button.textContent);
-                    const screenId = button.dataset.screen;
-                    this.ui.showScreen(screenId);
-                    this.updateUI(screenId);
-                });
-            });
-
             console.log('backButtons encontrados:', this.ui.backButtons.length);
-            this.ui.backButtons.forEach((button) => {
-                button.addEventListener('click', () => {
-                    console.log('Botão voltar clicado:', button.textContent);
-                    this.ui.showScreen(button.dataset.screen);
-                });
-            });
+            
+            // Reconfigurar navegação após cache do DOM
+            this.setupNavigation();
 
             // Fechar evento global
             const closeEventBtn = document.getElementById('close-event');
@@ -1258,49 +1367,83 @@ class GameManager {
 
     updateUI(activeScreen) {
         const currentActiveScreen = activeScreen || document.querySelector('.screen.active')?.id;
+        console.log('🔄 Atualizando UI para tela:', currentActiveScreen);
         
-        switch (currentActiveScreen) {
-            case 'status-screen':
-                this.ui.renderStatus(this.player);
-                break;
-            case 'equipment-screen':
-                this.ui.renderEquipment(this.player);
-                break;
-            case 'skills-screen':
-                this.ui.renderSkills(this.player);
-                break;
-            case 'inventory-screen':
-                this.ui.renderInventory(this.player);
-                break;
-            case 'shop-screen':
-                this.ui.renderShop(this.player);
-                break;
-            case 'profession-screen':
-                this.ui.renderProfession(this.player);
-                break;
-            case 'jobs-screen':
-                this.ui.renderJobs(this.player);
-                break;
-            case 'world-screen':
-                this.ui.renderWorld(this.player);
-                break;
-            case 'structures-screen':
-                this.ui.renderStructures(this.player);
-                break;
-            case 'castles-screen':
-                this.ui.renderCastles(this.player);
-                break;
+        if (!currentActiveScreen) {
+            console.warn('⚠️ Nenhuma tela ativa encontrada');
+            return;
+        }
+        
+        try {
+            switch (currentActiveScreen) {
+                case 'status-screen':
+                    console.log('📊 Renderizando status...');
+                    this.ui.renderStatus(this.player);
+                    break;
+                case 'equipment-screen':
+                    console.log('⚔️ Renderizando equipamentos...');
+                    this.ui.renderEquipment(this.player);
+                    break;
+                case 'skills-screen':
+                    console.log('🔮 Renderizando habilidades...');
+                    this.ui.renderSkills(this.player);
+                    break;
+                case 'inventory-screen':
+                    console.log('🎒 Renderizando inventário...');
+                    this.ui.renderInventory(this.player);
+                    break;
+                case 'shop-screen':
+                    console.log('🏪 Renderizando loja...');
+                    this.ui.renderShop(this.player);
+                    break;
+                case 'profession-screen':
+                    console.log('🔨 Renderizando profissão...');
+                    this.ui.renderProfession(this.player);
+                    break;
+                case 'jobs-screen':
+                    console.log('💼 Renderizando trabalhos...');
+                    this.ui.renderJobs(this.player);
+                    break;
+                case 'world-screen':
+                    console.log('🌍 Renderizando mundo...');
+                    this.ui.renderWorld(this.player);
+                    break;
+                case 'structures-screen':
+                    console.log('🏗️ Renderizando estruturas...');
+                    this.ui.renderStructures(this.player);
+                    break;
+                case 'castles-screen':
+                    console.log('🏰 Renderizando castelos...');
+                    this.ui.renderCastles(this.player);
+                    break;
+                default:
+                    console.warn('⚠️ Tela não reconhecida:', currentActiveScreen);
+                    break;
+            }
+            console.log('✅ UI atualizada com sucesso para:', currentActiveScreen);
+        } catch (error) {
+            console.error('❌ Erro ao atualizar UI:', error);
         }
     }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('🎮 Inicializando RPG v0.12...');
-    try {
-        const game = new GameManager();
-        game.initialize(); // Chamar initialize aqui
-        window.gameManager = game; // Para acesso global adicional
-    } catch (error) {
-        console.error('❌ Erro ao inicializar o jogo:', error);
-    }
+    console.log('🎮 Inicializando RPG v0.14...');
+    
+    // Aguardar um pouco para garantir que todos os scripts estejam carregados
+    setTimeout(() => {
+        try {
+            console.log('🔧 Criando GameManager...');
+            const game = new GameManager();
+            
+            console.log('🚀 Inicializando jogo...');
+            game.initialize();
+            
+            window.gameManager = game; // Para acesso global adicional
+            console.log('✅ Jogo inicializado com sucesso!');
+        } catch (error) {
+            console.error('❌ Erro ao inicializar o jogo:', error);
+            console.error('Stack trace:', error.stack);
+        }
+    }, 100);
 });

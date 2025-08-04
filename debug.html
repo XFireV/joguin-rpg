@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug - RPG</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/@phosphor-icons/web@2.0.3"></script>
+</head>
+<body>
+    <div id="app">
+        <div id="hub-screen" class="screen active">
+            <h1>Seu Legado</h1>
+            <div class="hub-grid">
+                <button class="hub-button" data-screen="status-screen"><i class="ph-bold ph-user-circle"></i>Status</button>
+                <button class="hub-button" data-screen="equipment-screen"><i class="ph-bold ph-shield-check"></i>Equipamentos</button>
+                <button class="hub-button" data-screen="skills-screen"><i class="ph-bold ph-magic-wand"></i>Habilidades</button>
+                <button class="hub-button" data-screen="inventory-screen"><i class="ph-bold ph-backpack"></i>Inventário</button>
+                <button class="hub-button" data-screen="shop-screen"><i class="ph-bold ph-storefront"></i>Loja</button>
+                <button class="hub-button" data-screen="profession-screen"><i class="ph-bold ph-hammer"></i>Profissão</button>
+                <button class="hub-button" data-screen="jobs-screen"><i class="ph-bold ph-briefcase"></i>Trabalho</button>
+                <button class="hub-button" data-screen="world-screen"><i class="ph-bold ph-map-trifold"></i>Mundo</button>
+                <button class="hub-button" data-screen="structures-screen"><i class="ph-bold ph-buildings"></i>Estruturas</button>
+                <button class="hub-button" data-screen="castles-screen"><i class="ph-bold ph-castle-turret"></i>Castelos</button>
+                <button class="hub-button" data-screen="changelog-screen"><i class="ph-bold ph-scroll"></i>Atualizações</button>
+            </div>
+        </div>
+
+        <div id="status-screen" class="screen">
+            <button class="back-button" data-screen="hub-screen"><i class="ph ph-arrow-left"></i> Voltar</button>
+            <h2>Status do Personagem</h2>
+            <div id="status-content" class="panel">
+                <p>Conteúdo do Status</p>
+            </div>
+        </div>
+
+        <div id="world-screen" class="screen">
+            <button class="back-button" data-screen="hub-screen"><i class="ph ph-arrow-left"></i> Voltar</button>
+            <h2>Explorar o Mundo</h2>
+            <div class="panel" id="world-content">
+                <p>Conteúdo do Mundo</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🔍 Iniciando debug...');
+            
+            // Verificar elementos
+            const screens = document.querySelectorAll('.screen');
+            const hubButtons = document.querySelectorAll('.hub-button');
+            const backButtons = document.querySelectorAll('.back-button');
+            
+            console.log('Screens encontrados:', screens.length);
+            console.log('Hub buttons encontrados:', hubButtons.length);
+            console.log('Back buttons encontrados:', backButtons.length);
+            
+            // Testar navegação
+            hubButtons.forEach((button, index) => {
+                console.log(`Botão ${index}:`, button.textContent.trim(), '->', button.dataset.screen);
+                
+                button.addEventListener('click', () => {
+                    console.log('🎯 Botão clicado:', button.textContent.trim());
+                    const screenId = button.dataset.screen;
+                    console.log('🎯 Mudando para tela:', screenId);
+                    
+                    // Esconder todas as telas
+                    screens.forEach(screen => {
+                        screen.classList.remove('active');
+                    });
+                    
+                    // Mostrar tela selecionada
+                    const targetScreen = document.getElementById(screenId);
+                    if (targetScreen) {
+                        targetScreen.classList.add('active');
+                        console.log('✅ Tela ativada:', screenId);
+                    } else {
+                        console.error('❌ Tela não encontrada:', screenId);
+                    }
+                });
+            });
+            
+            // Testar botões voltar
+            backButtons.forEach((button, index) => {
+                console.log(`Back button ${index}:`, button.textContent.trim(), '->', button.dataset.screen);
+                
+                button.addEventListener('click', () => {
+                    console.log('🎯 Botão voltar clicado');
+                    const screenId = button.dataset.screen;
+                    
+                    screens.forEach(screen => {
+                        screen.classList.remove('active');
+                    });
+                    
+                    const targetScreen = document.getElementById(screenId);
+                    if (targetScreen) {
+                        targetScreen.classList.add('active');
+                        console.log('✅ Voltou para tela:', screenId);
+                    }
+                });
+            });
+            
+            console.log('✅ Debug configurado!');
+        });
+    </script>
+</body>
+</html>
