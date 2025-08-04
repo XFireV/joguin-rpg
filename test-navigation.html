@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Navegação</title>
+    <style>
+        .screen {
+            display: none;
+            padding: 20px;
+        }
+        .screen.active {
+            display: block;
+        }
+        .hub-button {
+            margin: 10px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+        .back-button {
+            margin: 10px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div id="hub-screen" class="screen active">
+            <h1>Hub Principal</h1>
+            <button class="hub-button" data-screen="status-screen">Status</button>
+            <button class="hub-button" data-screen="world-screen">Mundo</button>
+            <button class="hub-button" data-screen="castles-screen">Castelos</button>
+        </div>
+
+        <div id="status-screen" class="screen">
+            <button class="back-button" data-screen="hub-screen">Voltar</button>
+            <h2>Status</h2>
+            <p>Conteúdo do Status</p>
+        </div>
+
+        <div id="world-screen" class="screen">
+            <button class="back-button" data-screen="hub-screen">Voltar</button>
+            <h2>Mundo</h2>
+            <p>Conteúdo do Mundo</p>
+        </div>
+
+        <div id="castles-screen" class="screen">
+            <button class="back-button" data-screen="hub-screen">Voltar</button>
+            <h2>Castelos</h2>
+            <p>Conteúdo dos Castelos</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🔍 Teste de navegação iniciado...');
+            
+            const screens = document.querySelectorAll('.screen');
+            const hubButtons = document.querySelectorAll('.hub-button');
+            const backButtons = document.querySelectorAll('.back-button');
+            
+            console.log('Screens:', screens.length);
+            console.log('Hub buttons:', hubButtons.length);
+            console.log('Back buttons:', backButtons.length);
+            
+            function showScreen(screenId) {
+                console.log('🖥️ Mostrando tela:', screenId);
+                
+                const targetScreen = document.getElementById(screenId);
+                if (!targetScreen) {
+                    console.error('❌ Tela não encontrada:', screenId);
+                    return false;
+                }
+                
+                screens.forEach(screen => {
+                    screen.classList.remove('active');
+                });
+                
+                targetScreen.classList.add('active');
+                console.log('✅ Tela ativada:', screenId);
+                return true;
+            }
+            
+            // Configurar navegação
+            hubButtons.forEach((button) => {
+                button.addEventListener('click', () => {
+                    console.log('🎯 Botão clicado:', button.textContent.trim());
+                    const screenId = button.dataset.screen;
+                    showScreen(screenId);
+                });
+            });
+            
+            backButtons.forEach((button) => {
+                button.addEventListener('click', () => {
+                    console.log('🎯 Botão voltar clicado');
+                    const screenId = button.dataset.screen;
+                    showScreen(screenId);
+                });
+            });
+            
+            console.log('✅ Navegação configurada!');
+        });
+    </script>
+</body>
+</html>
