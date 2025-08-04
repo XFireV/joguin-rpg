@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RPG - Sistema Completo v0.1</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/@phosphor-icons/web@2.0.3"></script>
+</head>
+<body>
+
+    <div id="app">
+        <!-- Faixa de Eventos Globais -->
+        <div id="global-event-banner" class="event-banner hidden">
+            <div class="event-content">
+                <span id="event-text"></span>
+                <button id="close-event" class="close-event-btn">&times;</button>
+            </div>
+        </div>
+
+        <div id="hub-screen" class="screen active">
+            <h1>Seu Legado</h1>
+            <div class="hub-grid">
+                <button class="hub-button" data-screen="status-screen"><i class="ph-bold ph-user-circle"></i>Status</button>
+                <button class="hub-button" data-screen="inventory-screen"><i class="ph-bold ph-backpack"></i>Inventário</button>
+                <button class="hub-button" data-screen="shop-screen"><i class="ph-bold ph-storefront"></i>Loja</button>
+                <button class="hub-button" data-screen="profession-screen"><i class="ph-bold ph-hammer"></i>Profissão</button>
+                <button class="hub-button" data-screen="jobs-screen"><i class="ph-bold ph-briefcase"></i>Trabalho</button>
+                <button class="hub-button" data-screen="world-screen"><i class="ph-bold ph-map-trifold"></i>Mundo</button>
+                <button class="hub-button" data-screen="castles-screen"><i class="ph-bold ph-castle-turret"></i>Castelos</button>
+                <button class="hub-button" data-screen="changelog-screen"><i class="ph-bold ph-scroll"></i>Atualizações</button>
+            </div>
+        </div>
+
+        <div id="status-screen" class="screen">
+            <button class="back-button" data-screen="hub-screen"><i class="ph ph-arrow-left"></i> Voltar</button>
+            <h2>Status do Personagem</h2>
+            <div id="status-content" class="panel"></div>
+        </div>
+
+        <div id="inventory-screen" class="screen">
+            <button class="back-button" data-screen="hub-screen"><i class="ph ph-arrow-left"></i> Voltar</button>
+            <h2>Inventário</h2>
+            <div id="inventory-content" class="panel">
+                <div id="inventory-weight"></div>
+                <ul id="inventory-list"></ul>
+            </div>
+        </div>
+
+        <div id="shop-screen" class="screen">
+            <button class="back-button" data-screen="hub-screen"><i class="ph ph-arrow-left"></i> Voltar</button>
+            <h2>Loja do Mercador</h2>
+            <div class="panel">
+                <div id="shop-timer"></div>
+                <div id="shop-content"></div>
+            </div>
+        </div>
+        
+        <div id="profession-screen" class="screen">
+            <button class="back-button" data-screen="hub-screen"><i class="ph ph-arrow-left"></i> Voltar</button>
+            <h2>Profissão</h2>
+            <div class="panel" id="profession-content"></div>
+        </div>
+
+        <div id="jobs-screen" class="screen">
+            <button class="back-button" data-screen="hub-screen"><i class="ph ph-arrow-left"></i> Voltar</button>
+            <h2>Trabalhos</h2>
+            <div class="panel" id="jobs-content"></div>
+        </div>
+
+        <div id="world-screen" class="screen">
+             <button class="back-button" data-screen="hub-screen"><i class="ph ph-arrow-left"></i> Voltar</button>
+            <h2>Explorar o Mundo</h2>
+            <div class="panel" id="world-content"></div>
+        </div>
+
+        <div id="castles-screen" class="screen">
+            <button class="back-button" data-screen="hub-screen"><i class="ph ph-arrow-left"></i> Voltar</button>
+            <h2>Castelos</h2>
+            <div class="panel" id="castles-content"></div>
+        </div>
+
+        <div id="changelog-screen" class="screen">
+            <button class="back-button" data-screen="hub-screen"><i class="ph ph-arrow-left"></i> Voltar</button>
+            <h2>Notas de Atualização</h2>
+            <div class="panel" id="changelog-content">
+                <h3>Versão Atual (v0.1)</h3>
+                <ul>
+                    <li><strong>Sistema de Raridade Completo:</strong> 7 níveis de raridade com cores distintas (Comum a Mítico)</li>
+                    <li><strong>Sistema de Profissões Expandido:</strong> 5 profissões disponíveis com receitas progressivas</li>
+                    <li><strong>Sistema de Trabalhos:</strong> 6 trabalhos diferentes com recompensas variadas</li>
+                    <li><strong>Loja Dinâmica:</strong> Atualiza a cada 24 horas com itens baseados em raridade</li>
+                    <li><strong>Sistema de Combate Avançado:</strong> Turnos baseados em agilidade, habilidades de monstros</li>
+                    <li><strong>Efeitos de Status:</strong> Veneno, paralisia, queimadura, congelamento, atordoamento, enraizamento, medo, encantamento</li>
+                    <li><strong>Eventos Globais:</strong> Eventos sazonais que aparecem como notificações</li>
+                    <li><strong>Sistema de Castelos:</strong> Conquiste castelos para gerar ouro passivamente</li>
+                    <li><strong>Ciclo Temporal Realista:</strong> Dia/noite de 2 horas, estações de 20 dias</li>
+                    <li><strong>Grimórios e Habilidades:</strong> Sistema expandido de aprendizado de habilidades</li>
+                    <li><strong>Campos de Caça:</strong> 8 áreas diferentes com monstros únicos</li>
+                    <li><strong>Eventos de Combate:</strong> Emboscadas e achados durante exploração</li>
+                    <li><strong>Progressão Satisfatória:</strong> Sistema de XP balanceado para todas as atividades</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Modal de Combate -->
+        <div id="combat-modal" class="modal hidden">
+            <div class="modal-content">
+                <h3>Combate</h3>
+                <div id="combat-info"></div>
+                <div id="combat-actions"></div>
+                <div id="combat-log"></div>
+            </div>
+        </div>
+
+        <div id="world-info-panel">
+            <div id="time-display">08:00</div>
+            <div id="weather-display"><i class="ph-bold ph-sun"></i> Ensolarado</div>
+            <div id="season-display"><i class="ph-bold ph-flower"></i> Primavera</div>
+        </div>
+    </div>
+
+    <script src="items.js"></script>
+    <script src="monsters.js"></script>
+    <script src="player.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
