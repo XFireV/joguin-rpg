@@ -791,8 +791,6 @@ class GameManager {
         this.player = new Player();
         this.world = new WorldManager();
         this.ui = new UIManager();
-        window.gameManager = this; // Para acesso global
-
         this.initialize();
     }
 
@@ -826,17 +824,23 @@ class GameManager {
     }
 
     bindEvents() {
+        console.log('Configurando event listeners...');
+        console.log('hubButtons encontrados:', this.ui.hubButtons.length);
+        
         // Navegação principal
-        this.ui.hubButtons.forEach(button => {
+        this.ui.hubButtons.forEach((button) => {
             button.addEventListener('click', () => {
+                console.log('Botão clicado:', button.textContent);
                 const screenId = button.dataset.screen;
                 this.ui.showScreen(screenId);
                 this.updateUI(screenId);
             });
         });
 
-        this.ui.backButtons.forEach(button => {
+        console.log('backButtons encontrados:', this.ui.backButtons.length);
+        this.ui.backButtons.forEach((button) => {
             button.addEventListener('click', () => {
+                console.log('Botão voltar clicado:', button.textContent);
                 this.ui.showScreen(button.dataset.screen);
             });
         });
@@ -1251,4 +1255,13 @@ class GameManager {
     }
 }
 
-window.onload = () => new GameManager();
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('🎮 Inicializando RPG v0.12...');
+    try {
+        const game = new GameManager();
+        console.log('✅ Jogo inicializado com sucesso!');
+        window.gameManager = game; // Para acesso global adicional
+    } catch (error) {
+        console.error('❌ Erro ao inicializar o jogo:', error);
+    }
+});

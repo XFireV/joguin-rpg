@@ -386,25 +386,7 @@ DB.monsterSkills = {
     "chrono_blast": { name: "Explosão Temporal", damage: 220, area: true }
 };
 
-// Efeitos de status expandidos
-const STATUS_EFFECTS = {
-    POISON: "poison",
-    PARALYSIS: "paralysis", 
-    BURN: "burn",
-    FREEZE: "freeze",
-    STUN: "stun",
-    ROOT: "root",
-    FEAR: "fear",
-    CHARM: "charm",
-    BLEED: "bleed",
-    CURSE: "curse",
-    WEAKNESS: "weakness",
-    BLIND: "blind",
-    SILENCE: "silence",
-    CONFUSION: "confusion",
-    TERROR: "terror",
-    DOOM: "doom"
-};
+// STATUS_EFFECTS agora está definido em player.js
 
 class Enemy {
     constructor(enemyData) {

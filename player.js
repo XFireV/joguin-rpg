@@ -2,6 +2,26 @@
 // CLASSE DO JOGADOR - VERSÃO 0.12
 // =================================================================================
 
+// Efeitos de status globais
+const STATUS_EFFECTS = {
+    POISON: "poison",
+    PARALYSIS: "paralysis", 
+    BURN: "burn",
+    FREEZE: "freeze",
+    STUN: "stun",
+    ROOT: "root",
+    FEAR: "fear",
+    CHARM: "charm",
+    BLEED: "bleed",
+    CURSE: "curse",
+    WEAKNESS: "weakness",
+    BLIND: "blind",
+    SILENCE: "silence",
+    CONFUSION: "confusion",
+    TERROR: "terror",
+    DOOM: "doom"
+};
+
 class Player {
     constructor() {
         this.level = 1;
