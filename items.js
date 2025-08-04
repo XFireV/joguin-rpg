@@ -1,5 +1,5 @@
 // =================================================================================
-// BANCO DE DADOS DE ITENS, RECEITAS E PROFISSÕES - VERSÃO 0.12
+// BANCO DE DADOS DE ITENS, RECEITAS E PROFISSÕES - VERSÃO 0.14
 // =================================================================================
 
 const RARITIES = {
@@ -193,6 +193,74 @@ const DB = {
         "s048": { name: "Necromancia", description: "Invoca mortos-vivos como aliados.", type: "Active", cost: 65, summon: "undead", duration: 15, element: "death" },
         "s049": { name: "Bênção", description: "Aumenta todos os atributos.", type: "Active", cost: 50, all_stats_boost: 25, duration: 12, element: "divine" },
         "s050": { name: "Aniquilação", description: "Destrói instantaneamente inimigos fracos.", type: "Active", cost: 120, effect: "instant_kill", threshold: 0.2, element: "void" },
+
+        // ===== NOVAS HABILIDADES ESPECIAIS v0.14 =====
+        "s051": { name: "Apocalipse", description: "Destruição total de tudo ao redor.", type: "Active", damage: 1000, cost: 200, area: true, element: "chaos" },
+        "s052": { name: "Ressurreição", description: "Revive com HP e MP completos.", type: "Active", cost: 150, effect: "resurrection", element: "divine" },
+        "s053": { name: "Dimensão", description: "Cria uma dimensão paralela.", type: "Active", cost: 100, effect: "dimension", duration: 10, element: "space" },
+        "s054": { name: "Caos", description: "Causa efeitos aleatórios devastadores.", type: "Active", damage: 300, cost: 80, effect: "chaos", element: "chaos" },
+        "s055": { name: "Absorção", description: "Absorve ataques e devolve o dano.", type: "Active", cost: 60, effect: "absorption", duration: 5, element: "void" },
+        "s056": { name: "Reflexão", description: "Reflete todos os ataques recebidos.", type: "Active", cost: 70, effect: "reflection", duration: 3, element: "mirror" },
+        "s057": { name: "Amplificação", description: "Aumenta poder de todas as habilidades.", type: "Active", cost: 90, effect: "amplification", duration: 8, element: "arcane" },
+        "s058": { name: "Purificação", description: "Remove todos os efeitos negativos.", type: "Active", cost: 40, effect: "purify", element: "light" },
+        "s059": { name: "Proteção Divina", description: "Torna-se invencível temporariamente.", type: "Active", cost: 120, effect: "divine_protection", duration: 5, element: "divine" },
+        "s060": { name: "Destruição Total", description: "Aniquila tudo em seu caminho.", type: "Active", damage: 2000, cost: 300, area: true, element: "void" },
+
+        // ===== HABILIDADES DE COMBATE AVANÇADAS =====
+        "s061": { name: "Combo Mortal", description: "Sequência de 5 ataques devastadores.", type: "Active", damage: 50, hits: 5, cost: 45, element: "physical" },
+        "s062": { name: "Golpe Crítico", description: "Ataque com 100% de chance crítica.", type: "Active", damage: 150, cost: 35, crit_guaranteed: true, element: "physical" },
+        "s063": { name: "Contra-Ataque", description: "Prepara contra-ataque devastador.", type: "Active", cost: 25, effect: "counter_attack", element: "physical" },
+        "s064": { name: "Esquiva Perfeita", description: "Esquiva todos os ataques por 3 turnos.", type: "Active", cost: 50, effect: "perfect_dodge", duration: 3, element: "wind" },
+        "s065": { name: "Fúria Berserker", description: "Sacrifica HP por dano massivo.", type: "Active", damage: 400, hp_cost: 100, cost: 0, element: "blood" },
+
+        // ===== HABILIDADES ELEMENTAIS SUPREMAS =====
+        "s066": { name: "Inferno", description: "Invoca o inferno na terra.", type: "Active", damage: 800, cost: 150, area: true, effect: "burn", element: "fire" },
+        "s067": { name: "Abismo", description: "Abre um portal para o abismo.", type: "Active", damage: 600, cost: 120, effect: "void_damage", element: "void" },
+        "s068": { name: "Tempestade Celestial", description: "Tempestade divina devastadora.", type: "Active", damage: 700, cost: 130, area: true, element: "lightning" },
+        "s069": { name: "Terremoto Apocalíptico", description: "Destrói a terra completamente.", type: "Active", damage: 900, cost: 160, area: true, element: "earth" },
+        "s070": { name: "Tsunami Gigante", description: "Onda gigante que arrasa tudo.", type: "Active", damage: 750, cost: 140, area: true, element: "water" },
+
+        // ===== HABILIDADES DE SUPORTE SUPREMAS =====
+        "s071": { name: "Cura Divina", description: "Cura completa e remove todos os efeitos.", type: "Active", heal: 999, cost: 80, effect: "divine_heal", element: "light" },
+        "s072": { name: "Proteção Eterna", description: "Escudo que nunca quebra.", type: "Active", shield: 999, cost: 100, duration: 10, element: "divine" },
+        "s073": { name: "Bênção Suprema", description: "Aumenta todos os atributos em 100%.", type: "Active", cost: 120, all_stats_boost: 100, duration: 15, element: "divine" },
+        "s074": { name: "Regeneração Infinita", description: "Regenera HP e MP infinitamente.", type: "Active", cost: 90, effect: "infinite_regen", duration: 20, element: "nature" },
+        "s075": { name: "Imortalidade", description: "Torna-se imortal temporariamente.", type: "Active", cost: 200, effect: "immortality", duration: 10, element: "divine" },
+
+        // ===== HABILIDADES ÚNICAS E ESPECIAIS =====
+        "s076": { name: "Controle do Tempo", description: "Controla o fluxo do tempo.", type: "Active", cost: 150, effect: "time_control", duration: 8, element: "time" },
+        "s077": { name: "Manipulação da Realidade", description: "Altera a realidade ao seu favor.", type: "Active", cost: 300, effect: "reality_manipulation", duration: 5, element: "void" },
+        "s078": { name: "Invocação Divina", description: "Invoca uma entidade divina.", type: "Active", cost: 180, summon: "divine_being", duration: 15, element: "divine" },
+        "s079": { name: "Caos Controlado", description: "Controla o caos para seu benefício.", type: "Active", cost: 120, effect: "controlled_chaos", duration: 12, element: "chaos" },
+        "s080": { name: "Destruição Final", description: "Habilidade suprema de destruição.", type: "Active", damage: 5000, cost: 500, area: true, element: "void" },
+
+        // ===== HABILIDADES DE COMBATE ESPECIALIZADAS =====
+        "s081": { name: "Golpe de Morte", description: "Ataque com chance de morte instantânea.", type: "Active", damage: 200, cost: 60, effect: "death_strike", element: "death" },
+        "s082": { name: "Combo Infinito", description: "Sequência infinita de ataques.", type: "Active", damage: 30, hits: 10, cost: 80, element: "physical" },
+        "s083": { name: "Ataque Relâmpago", description: "Ataque extremamente rápido.", type: "Active", damage: 100, cost: 20, effect: "lightning_speed", element: "lightning" },
+        "s084": { name: "Golpe de Sorte", description: "Ataque baseado na sorte.", type: "Active", damage: 50, cost: 15, effect: "lucky_strike", element: "divine" },
+        "s085": { name: "Ataque Crítico", description: "Ataque com dano crítico garantido.", type: "Active", damage: 300, cost: 40, crit_guaranteed: true, element: "physical" },
+
+        // ===== HABILIDADES DE MAGIA NEGRA =====
+        "s086": { name: "Drenar Alma", description: "Drena a alma do inimigo.", type: "Active", damage: 150, heal: 75, cost: 70, element: "dark" },
+        "s087": { name: "Maldição Eterna", description: "Maldição que nunca termina.", type: "Active", cost: 100, effect: "eternal_curse", element: "dark" },
+        "s088": { name: "Necromancia Avançada", description: "Invoca um exército de mortos-vivos.", type: "Active", cost: 120, summon: "undead_army", duration: 20, element: "death" },
+        "s089": { name: "Controle Mental", description: "Controla a mente do inimigo.", type: "Active", cost: 90, effect: "mind_control", duration: 8, element: "psychic" },
+        "s090": { name: "Destruição Mental", description: "Destrói a mente do inimigo.", type: "Active", damage: 200, cost: 110, effect: "mental_destruction", element: "psychic" },
+
+        // ===== HABILIDADES DE ELEMENTOS PRIMORDIAIS =====
+        "s091": { name: "Fogo Primordial", description: "Fogo que queima a alma.", type: "Active", damage: 400, cost: 100, effect: "soul_burn", element: "fire" },
+        "s092": { name: "Gelo Eterno", description: "Gelo que congela o tempo.", type: "Active", damage: 350, cost: 95, effect: "time_freeze", element: "ice" },
+        "s093": { name: "Trovão Divino", description: "Trovão dos deuses.", type: "Active", damage: 450, cost: 110, effect: "divine_thunder", element: "lightning" },
+        "s094": { name: "Terra Sagrada", description: "Terra abençoada pelos deuses.", type: "Active", damage: 380, cost: 105, effect: "holy_earth", element: "earth" },
+        "s095": { name: "Água da Vida", description: "Água que dá vida.", type: "Active", heal: 500, cost: 90, effect: "life_water", element: "water" },
+
+        // ===== HABILIDADES DE COMBINAÇÃO =====
+        "s096": { name: "Fogo e Gelo", description: "Combina fogo e gelo.", type: "Active", damage: 600, cost: 130, effect: "fire_ice", element: "fusion" },
+        "s097": { name: "Terra e Trovão", description: "Combina terra e trovão.", type: "Active", damage: 550, cost: 125, effect: "earth_thunder", element: "fusion" },
+        "s098": { name: "Luz e Sombra", description: "Combina luz e sombra.", type: "Active", damage: 700, cost: 140, effect: "light_shadow", element: "fusion" },
+        "s099": { name: "Vida e Morte", description: "Combina vida e morte.", type: "Active", damage: 800, cost: 150, effect: "life_death", element: "fusion" },
+        "s100": { name: "Criação e Destruição", description: "Combina criação e destruição.", type: "Active", damage: 1000, cost: 200, effect: "creation_destruction", element: "fusion" }
     },
 
     professions: {

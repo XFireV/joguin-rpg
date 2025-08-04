@@ -1,5 +1,5 @@
 // =================================================================================
-// GERENCIADORES E LÓGICA PRINCIPAL - VERSÃO 0.12
+// GERENCIADORES E LÓGICA PRINCIPAL - VERSÃO 0.14
 // =================================================================================
 
 class WorldManager {
@@ -97,7 +97,22 @@ class WorldManager {
             { text: "💫 Chuva de meteoros! XP de combate dobrado!", effect: "meteor_shower", duration: 1800 },
             { text: "🌙 Lua Cheia! Transformações e habilidades especiais são mais poderosas!", effect: "full_moon", duration: 3600 },
             { text: "⚡ Tempestade mágica! Todos os atributos temporariamente aumentados!", effect: "magic_storm", duration: 1200 },
-            { text: "🎭 Carnaval dos Deuses! Loot de todos os inimigos triplicado!", effect: "divine_carnival", duration: 2700 }
+            { text: "🎭 Carnaval dos Deuses! Loot de todos os inimigos triplicado!", effect: "divine_carnival", duration: 2700 },
+            { text: "🔥 Invasão Demoníaca! Monstros mais fortes, mas loot melhor!", effect: "demon_invasion", duration: 3600 },
+            { text: "🌊 Tsunami Mágico! Habilidades de água são mais poderosas!", effect: "magic_tsunami", duration: 2400 },
+            { text: "⚔️ Torneio dos Heróis! XP de combate triplicado!", effect: "hero_tournament", duration: 5400 },
+            { text: "💎 Era de Cristal! Chance de encontrar itens raros aumentada!", effect: "crystal_age", duration: 7200 },
+            { text: "🌪️ Ventos do Destino! Movimento e agilidade aumentados!", effect: "destiny_winds", duration: 1800 },
+            { text: "🕰️ Distorção Temporal! Tempo passa mais rápido!", effect: "time_distortion", duration: 3600 },
+            { text: "🌈 Arco-íris Mágico! Todos os elementos são mais poderosos!", effect: "magic_rainbow", duration: 2700 },
+            { text: "🌌 Portal Dimensional! Chance de encontrar itens únicos!", effect: "dimensional_portal", duration: 1800 },
+            { text: "⚜️ Bênção Real! Todos os atributos aumentados em 50%!", effect: "royal_blessing", duration: 3600 },
+            { text: "🔮 Profecia Mágica! Habilidades especiais desbloqueadas!", effect: "magic_prophecy", duration: 5400 },
+            { text: "🎪 Festival dos Elementos! Habilidades elementais são mais poderosas!", effect: "elemental_festival", duration: 7200 },
+            { text: "⚔️ Guerra dos Deuses! Combate mais intenso, recompensas maiores!", effect: "gods_war", duration: 10800 },
+            { text: "🌍 Convergência Dimensional! Realidade alterada temporariamente!", effect: "dimensional_convergence", duration: 3600 },
+            { text: "💫 Chuva de Estrelas! XP e loot multiplicados por 5!", effect: "star_shower", duration: 1800 },
+            { text: "🔥 Apocalipse Controlado! Poder supremo temporário!", effect: "controlled_apocalypse", duration: 900 }
         ];
 
         let eventPool = events[this.season];
@@ -175,30 +190,39 @@ class UIManager {
     }
 
     cacheDOM() {
-        this.hubButtons = document.querySelectorAll('.hub-button');
-        this.backButtons = document.querySelectorAll('.back-button');
-        this.statusContent = document.getElementById('status-content');
-        this.inventoryWeight = document.getElementById('inventory-weight');
-        this.inventoryList = document.getElementById('inventory-list');
-        this.shopContent = document.getElementById('shop-content');
-        this.shopTimer = document.getElementById('shop-timer');
-        this.professionContent = document.getElementById('profession-content');
-        this.jobsContent = document.getElementById('jobs-content');
-        this.worldContent = document.getElementById('world-content');
-        this.castlesContent = document.getElementById('castles-content');
-        this.timeDisplay = document.getElementById('time-display');
-        this.weatherDisplay = document.getElementById('weather-display');
-        this.seasonDisplay = document.getElementById('season-display');
-        this.eventBanner = document.getElementById('global-event-banner');
-        this.eventText = document.getElementById('event-text');
-        this.combatModal = document.getElementById('combat-modal');
-        
-        // Novos elementos
-        this.equipmentSlots = document.querySelectorAll('.equipment-slot');
-        this.skillSlots = document.querySelectorAll('.skill-slot');
-        this.equipmentAvailable = document.getElementById('equipment-available');
-        this.skillsAvailable = document.getElementById('skills-available');
-        this.structuresContent = document.getElementById('structures-content');
+        // Aguardar um pouco para garantir que o DOM esteja pronto
+        setTimeout(() => {
+            this.hubButtons = document.querySelectorAll('.hub-button');
+            this.backButtons = document.querySelectorAll('.back-button');
+            this.statusContent = document.getElementById('status-content');
+            this.inventoryWeight = document.getElementById('inventory-weight');
+            this.inventoryList = document.getElementById('inventory-list');
+            this.shopContent = document.getElementById('shop-content');
+            this.shopTimer = document.getElementById('shop-timer');
+            this.professionContent = document.getElementById('profession-content');
+            this.jobsContent = document.getElementById('jobs-content');
+            this.worldContent = document.getElementById('world-content');
+            this.castlesContent = document.getElementById('castles-content');
+            this.timeDisplay = document.getElementById('time-display');
+            this.weatherDisplay = document.getElementById('weather-display');
+            this.seasonDisplay = document.getElementById('season-display');
+            this.eventBanner = document.getElementById('global-event-banner');
+            this.eventText = document.getElementById('event-text');
+            this.combatModal = document.getElementById('combat-modal');
+            
+            // Novos elementos
+            this.equipmentSlots = document.querySelectorAll('.equipment-slot');
+            this.skillSlots = document.querySelectorAll('.skill-slot');
+            this.equipmentAvailable = document.getElementById('equipment-available');
+            this.skillsAvailable = document.getElementById('skills-available');
+            this.structuresContent = document.getElementById('structures-content');
+            
+            console.log('DOM cacheado:', {
+                hubButtons: this.hubButtons.length,
+                backButtons: this.backButtons.length,
+                screens: this.screens.length
+            });
+        }, 100);
     }
 
     setupSkillSlots() {
@@ -597,7 +621,7 @@ class UIManager {
                     </div>
                     <span></span>
                     <span></span>
-                    <button class="action-button" data-action="enter-hunt" data-area-id="${id}">Explorar</button>
+                    <button class="action-button" data-action="enter-hunting-ground" data-area-id="${id}">Explorar</button>
                 </div>
             `;
         });
@@ -788,17 +812,20 @@ class UIManager {
 
 class GameManager {
     constructor() {
-        this.player = new Player();
         this.world = new WorldManager();
+        this.player = new Player();
         this.ui = new UIManager();
-        this.initialize();
     }
 
     initialize() {
-        this.bindEvents();
-        this.ui.showScreen('hub-screen');
-        this.updateUI();
-        setInterval(() => this.gameLoop(), 1000);
+        // Aguardar um pouco mais para garantir que tudo esteja carregado
+        setTimeout(() => {
+            this.bindEvents();
+            this.ui.showScreen('hub-screen');
+            this.updateUI();
+            setInterval(() => this.gameLoop(), 1000);
+            console.log('✅ Jogo inicializado com sucesso!');
+        }, 200);
     }
 
     gameLoop() {
@@ -825,229 +852,241 @@ class GameManager {
 
     bindEvents() {
         console.log('Configurando event listeners...');
-        console.log('hubButtons encontrados:', this.ui.hubButtons.length);
         
-        // Navegação principal
-        this.ui.hubButtons.forEach((button) => {
-            button.addEventListener('click', () => {
-                console.log('Botão clicado:', button.textContent);
-                const screenId = button.dataset.screen;
-                this.ui.showScreen(screenId);
-                this.updateUI(screenId);
+        // Aguardar um pouco para garantir que os elementos existam
+        setTimeout(() => {
+            this.ui.hubButtons = document.querySelectorAll('.hub-button');
+            this.ui.backButtons = document.querySelectorAll('.back-button');
+            
+            console.log('hubButtons encontrados:', this.ui.hubButtons.length);
+            
+            // Navegação principal
+            this.ui.hubButtons.forEach((button) => {
+                button.addEventListener('click', () => {
+                    console.log('Botão clicado:', button.textContent);
+                    const screenId = button.dataset.screen;
+                    this.ui.showScreen(screenId);
+                    this.updateUI(screenId);
+                });
             });
-        });
 
-        console.log('backButtons encontrados:', this.ui.backButtons.length);
-        this.ui.backButtons.forEach((button) => {
-            button.addEventListener('click', () => {
-                console.log('Botão voltar clicado:', button.textContent);
-                this.ui.showScreen(button.dataset.screen);
+            console.log('backButtons encontrados:', this.ui.backButtons.length);
+            this.ui.backButtons.forEach((button) => {
+                button.addEventListener('click', () => {
+                    console.log('Botão voltar clicado:', button.textContent);
+                    this.ui.showScreen(button.dataset.screen);
+                });
             });
-        });
 
-        // Fechar evento global
-        document.getElementById('close-event').addEventListener('click', () => {
-            this.ui.eventBanner.classList.add('hidden');
-        });
-
-        // Status
-        document.getElementById('status-content').addEventListener('click', (e) => {
-            if (e.target.tagName === 'BUTTON' && e.target.dataset.stat) {
-                if (this.player.addAttribute(e.target.dataset.stat)) {
-                    this.ui.renderStatus(this.player);
-                }
+            // Fechar evento global
+            const closeEventBtn = document.getElementById('close-event');
+            if (closeEventBtn) {
+                closeEventBtn.addEventListener('click', () => {
+                    this.ui.eventBanner.classList.add('hidden');
+                });
             }
-        });
 
-        // Equipamentos
-        document.addEventListener('click', (e) => {
-            const action = e.target.dataset.action;
-            
-            if (action === 'equip-equipment') {
-                const itemId = e.target.dataset.itemId;
-                if (this.player.equipItem(itemId)) {
-                    alert('Item equipado!');
-                    this.updateUI('equipment-screen');
-                }
-            } else if (action === 'unequip') {
-                const slot = e.target.dataset.slot;
-                if (this.player.unequipItem(slot)) {
-                    alert('Item removido!');
-                    this.updateUI('equipment-screen');
-                }
-            }
-        });
-
-        // Habilidades
-        document.addEventListener('click', (e) => {
-            const action = e.target.dataset.action;
-            
-            if (action === 'equip-skill') {
-                const skillId = e.target.dataset.skillId;
-                if (this.player.equipSkill(skillId)) {
-                    alert('Habilidade equipada!');
-                    this.updateUI('skills-screen');
-                } else {
-                    alert('Não foi possível equipar a habilidade!');
-                }
-            } else if (action === 'unequip-skill') {
-                const skillId = e.target.dataset.skillId;
-                if (this.player.unequipSkill(skillId)) {
-                    alert('Habilidade removida!');
-                    this.updateUI('skills-screen');
-                }
-            }
-        });
-
-        // Inventário
-        document.getElementById('inventory-list').addEventListener('click', (e) => {
-            const action = e.target.dataset.action;
-            const itemId = e.target.dataset.itemId;
-            
-            if (action === 'use-grimoire') {
-                const message = this.player.learnSkillFromGrimoire(itemId);
-                alert(message);
-                this.updateUI('inventory-screen');
-            } else if (action === 'use-consumable') {
-                const result = this.player.useConsumable(itemId);
-                if (result.success) {
-                    alert(result.message);
-                    this.updateUI('inventory-screen');
-                } else {
-                    alert(result.message);
-                }
-            } else if (action === 'equip-item') {
-                if (this.player.equipItem(itemId)) {
-                    alert('Item equipado!');
-                    this.updateUI('inventory-screen');
-                }
-            }
-        });
-
-        // Loja
-        document.getElementById('shop-content').addEventListener('click', (e) => {
-            if (e.target.dataset.action === 'buy-item') {
-                const itemId = e.target.dataset.itemId;
-                const price = parseInt(e.target.dataset.price);
-                const quantity = parseInt(e.target.dataset.quantity);
-                
-                if (this.player.gold >= price) {
-                    this.player.gold -= price;
-                    this.player.addItem(itemId, quantity);
-                    
-                    // Remover item da loja
-                    const shopItemIndex = this.ui.shop.items.findIndex(item => item.id === itemId);
-                    if (shopItemIndex > -1) {
-                        this.ui.shop.items.splice(shopItemIndex, 1);
+            // Status
+            const statusContent = document.getElementById('status-content');
+            if (statusContent) {
+                statusContent.addEventListener('click', (e) => {
+                    if (e.target.tagName === 'BUTTON' && e.target.dataset.stat) {
+                        if (this.player.addAttribute(e.target.dataset.stat)) {
+                            this.ui.renderStatus(this.player);
+                        }
                     }
+                });
+            }
+
+            // Equipamentos
+            document.addEventListener('click', (e) => {
+                const action = e.target.dataset.action;
+                
+                if (action === 'equip-equipment') {
+                    const itemId = e.target.dataset.itemId;
+                    if (this.player.equipItem(itemId)) {
+                        alert('Item equipado!');
+                        this.updateUI('equipment-screen');
+                    }
+                } else if (action === 'unequip') {
+                    const slot = e.target.dataset.slot;
+                    if (this.player.unequipItem(slot)) {
+                        alert('Item removido!');
+                        this.updateUI('equipment-screen');
+                    }
+                }
+            });
+
+            // Habilidades
+            document.addEventListener('click', (e) => {
+                const action = e.target.dataset.action;
+                
+                if (action === 'equip-skill') {
+                    const skillId = e.target.dataset.skillId;
+                    if (this.player.equipSkill(skillId)) {
+                        alert('Habilidade equipada!');
+                        this.updateUI('skills-screen');
+                    } else {
+                        alert('Não foi possível equipar a habilidade!');
+                    }
+                } else if (action === 'unequip-skill') {
+                    const skillId = e.target.dataset.skillId;
+                    if (this.player.unequipSkill(skillId)) {
+                        alert('Habilidade removida!');
+                        this.updateUI('skills-screen');
+                    }
+                }
+            });
+
+            // Inventário
+            const inventoryList = document.getElementById('inventory-list');
+            if (inventoryList) {
+                inventoryList.addEventListener('click', (e) => {
+                    const action = e.target.dataset.action;
+                    const itemId = e.target.dataset.itemId;
                     
-                    alert(`Você comprou ${DB.items[itemId].name} x${quantity}!`);
-                    this.updateUI('shop-screen');
-                } else {
-                    alert('Ouro insuficiente!');
-                }
+                    if (action === 'use-grimoire') {
+                        const message = this.player.learnSkillFromGrimoire(itemId);
+                        alert(message);
+                        this.updateUI('inventory-screen');
+                    } else if (action === 'use-consumable') {
+                        const result = this.player.useConsumable(itemId);
+                        if (result.success) {
+                            alert(result.message);
+                            this.updateUI('inventory-screen');
+                        } else {
+                            alert(result.message);
+                        }
+                    } else if (action === 'equip-item') {
+                        if (this.player.equipItem(itemId)) {
+                            alert('Item equipado!');
+                            this.updateUI('inventory-screen');
+                        }
+                    }
+                });
             }
-        });
 
-        // Profissão
-        document.getElementById('profession-content').addEventListener('click', (e) => {
-            const action = e.target.dataset.action;
-            
-            if (action === 'learn-profession') {
-                this.player.profession = { id: e.target.dataset.profId, level: 1, xp: 0 };
-                this.updateUI('profession-screen');
-            } else if (action === 'craft-item') {
-                this.craftItem(e.target.dataset.recipeId);
+            // Loja
+            const shopContent = document.getElementById('shop-content');
+            if (shopContent) {
+                shopContent.addEventListener('click', (e) => {
+                    if (e.target.dataset.action === 'buy-item') {
+                        const itemId = e.target.dataset.itemId;
+                        const result = this.player.buyItem(itemId);
+                        if (result.success) {
+                            alert(`Comprou ${DB.items[itemId].name} por ${result.cost} ouro!`);
+                            this.updateUI('shop-screen');
+                        } else {
+                            alert(result.message);
+                        }
+                    }
+                });
             }
-        });
 
-        // Trabalhos
-        document.getElementById('jobs-content').addEventListener('click', (e) => {
-            const action = e.target.dataset.action;
-            
-            if (action === 'start-job') {
-                const jobId = e.target.dataset.jobId;
-                if (this.player.startJob(jobId)) {
-                    alert(`Trabalho iniciado: ${DB.jobs[jobId].name}`);
-                    this.updateUI('jobs-screen');
-                }
-            } else if (action === 'complete-job') {
-                const completed = this.player.completeJob();
-                if (completed) {
-                    const job = DB.jobs[completed.id];
-                    alert(`Trabalho concluído! Você ganhou ${job.rewards.gold} ouro!`);
-                    this.updateUI('jobs-screen');
-                }
+            // Profissão
+            const professionContent = document.getElementById('profession-content');
+            if (professionContent) {
+                professionContent.addEventListener('click', (e) => {
+                    if (e.target.dataset.action === 'select-profession') {
+                        const profession = e.target.dataset.profession;
+                        this.player.selectProfession(profession);
+                        this.updateUI('profession-screen');
+                    } else if (e.target.dataset.action === 'craft-item') {
+                        const recipeId = e.target.dataset.recipeId;
+                        this.craftItem(recipeId);
+                    }
+                });
             }
-        });
 
-        // Mundo
-        document.getElementById('world-content').addEventListener('click', (e) => {
-            if (e.target.dataset.action === 'enter-hunt') {
-                this.enterHuntingGround(e.target.dataset.areaId);
+            // Trabalhos
+            const jobsContent = document.getElementById('jobs-content');
+            if (jobsContent) {
+                jobsContent.addEventListener('click', (e) => {
+                    if (e.target.dataset.action === 'start-job') {
+                        const jobId = e.target.dataset.jobId;
+                        const result = this.player.startJob(jobId);
+                        if (result.success) {
+                            alert(`Iniciou trabalho: ${DB.jobs[jobId].name}`);
+                            this.updateUI('jobs-screen');
+                        } else {
+                            alert(result.message);
+                        }
+                    }
+                });
             }
-        });
 
-        // Estruturas
-        document.addEventListener('click', (e) => {
-            if (e.target.dataset.action === 'build-structure') {
-                const structureId = e.target.dataset.structureId;
-                if (this.player.buildStructure(structureId)) {
-                    const structure = DB.structures[structureId];
-                    alert(`Estrutura construída: ${structure.name}!`);
-                    this.updateUI('structures-screen');
-                } else {
-                    alert('Recursos insuficientes!');
-                }
+            // Mundo
+            const worldContent = document.getElementById('world-content');
+            if (worldContent) {
+                worldContent.addEventListener('click', (e) => {
+                    if (e.target.dataset.action === 'enter-hunting-ground') {
+                        const areaId = e.target.dataset.areaId;
+                        this.enterHuntingGround(areaId);
+                    }
+                });
             }
-        });
 
-        // Castelos
-        document.getElementById('castles-content').addEventListener('click', (e) => {
-            const action = e.target.dataset.action;
-            
-            if (action === 'buy-castle') {
-                const castleId = e.target.dataset.castleId;
-                if (this.player.buyCastle(castleId)) {
-                    alert(`Castelo adquirido: ${DB.castles[castleId].name}!`);
-                    this.updateUI('castles-screen');
-                } else {
-                    alert('Ouro insuficiente ou castelo já possuído!');
+            // Estruturas
+            document.addEventListener('click', (e) => {
+                if (e.target.dataset.action === 'build-structure') {
+                    const structureId = e.target.dataset.structureId;
+                    const result = this.player.buildStructure(structureId);
+                    if (result.success) {
+                        alert(`Estrutura "${DB.structures[structureId].name}" construída!`);
+                        this.updateUI('structures-screen');
+                    } else {
+                        alert(result.message);
+                    }
                 }
-            } else if (action === 'upgrade-castle') {
-                const castleId = e.target.dataset.castleId;
-                if (this.player.upgradeCastle(castleId)) {
-                    const castle = DB.castles[castleId];
-                    const newLevel = this.player.castleLevels[castleId];
-                    alert(`${castle.name} melhorado para nível ${newLevel}!`);
-                    this.updateUI('castles-screen');
-                } else {
-                    alert('Ouro insuficiente ou nível máximo atingido!');
-                }
-            } else if (action === 'collect-income') {
-                const income = this.player.collectCastleIncome();
-                if (income > 0) {
-                    alert(`Você coletou ${income} ouro dos seus castelos!`);
-                    this.updateUI('castles-screen');
-                } else {
-                    alert('Nenhuma renda disponível para coleta!');
-                }
-            }
-        });
+            });
 
-        // Combate
-        document.getElementById('combat-actions').addEventListener('click', (e) => {
-            const action = e.target.dataset.combatAction;
-            
-            if (action === 'attack') {
-                this.processCombatTurn('attack');
-            } else if (action === 'skill') {
-                this.processCombatTurn('skill', e.target.dataset.skillId);
-            } else if (action === 'flee') {
-                this.ui.endCombat();
-                alert('Você fugiu do combate!');
+            // Castelos
+            const castlesContent = document.getElementById('castles-content');
+            if (castlesContent) {
+                castlesContent.addEventListener('click', (e) => {
+                    if (e.target.dataset.action === 'conquer-castle') {
+                        const castleId = e.target.dataset.castleId;
+                        const result = this.player.conquerCastle(castleId);
+                        if (result.success) {
+                            alert(`Castelo "${DB.castles[castleId].name}" conquistado!`);
+                            this.updateUI('castles-screen');
+                        } else {
+                            alert(result.message);
+                        }
+                    } else if (e.target.dataset.action === 'upgrade-castle') {
+                        const castleId = e.target.dataset.castleId;
+                        const result = this.player.upgradeCastle(castleId);
+                        if (result.success) {
+                            alert(`Castelo "${DB.castles[castleId].name}" melhorado!`);
+                            this.updateUI('castles-screen');
+                        } else {
+                            alert(result.message);
+                        }
+                    }
+                });
             }
-        });
+
+            // Combate
+            const combatActions = document.getElementById('combat-actions');
+            if (combatActions) {
+                combatActions.addEventListener('click', (e) => {
+                    const action = e.target.dataset.action;
+                    const skillId = e.target.dataset.skillId;
+                    
+                    if (action === 'attack') {
+                        this.processCombatTurn('attack');
+                    } else if (action === 'skill') {
+                        this.processCombatTurn('skill', skillId);
+                    } else if (action === 'item') {
+                        this.processCombatTurn('item');
+                    } else if (action === 'flee') {
+                        this.processCombatTurn('flee');
+                    }
+                });
+            }
+
+            console.log('✅ Event listeners configurados com sucesso!');
+        }, 300);
     }
 
     craftItem(recipeId) {
@@ -1259,7 +1298,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('🎮 Inicializando RPG v0.12...');
     try {
         const game = new GameManager();
-        console.log('✅ Jogo inicializado com sucesso!');
+        game.initialize(); // Chamar initialize aqui
         window.gameManager = game; // Para acesso global adicional
     } catch (error) {
         console.error('❌ Erro ao inicializar o jogo:', error);
